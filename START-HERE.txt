@@ -1,0 +1,11 @@
+CARE RECALL — YOUR FREE INTERVIEW STUDY WEBSITE
+
+1. Open index.html to see your website on a computer.
+2. Open Listen & Learn to hear each question and then its answer.
+3. Set a 6-second pause to try answering before the answer plays.
+4. Open Recall Practice to test yourself on random questions.
+5. For a free website link on your phone, see the step-by-step GitHub Pages instructions in README.md.
+
+No API key. No payments. No coding required.
+
+Note: Voice is made using the browser/device's free speech voices, not a human recording.

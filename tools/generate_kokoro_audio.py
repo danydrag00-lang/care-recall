@@ -15,6 +15,7 @@ import subprocess
 import tempfile
 import time
 
+import numpy as np
 import soundfile as sf
 from kokoro_onnx import Kokoro
 
@@ -58,16 +59,47 @@ def encode_mp3(samples, sample_rate: int, target: Path) -> None:
         tmp.replace(target)
 
 
+def speech_chunks(text: str, max_chars: int = 260) -> list[str]:
+    """Split long uploaded answers into sentences/words before synthesis.
+
+    Kokoro's tokenizer has a practical length limit. Generate every part rather
+    than silently truncating a learner's full original answer.
+    """
+    result = []
+    current = ""
+    for word in str(text).split():
+        candidate = (current + " " + word).strip()
+        if current and len(candidate) > max_chars:
+            result.append(current)
+            current = word
+        else:
+            current = candidate
+    if current:
+        result.append(current)
+    return result
+
+
 def generate_one(kokoro: Kokoro, words: str, output: Path, voice: str, force: bool = False) -> None:
     if output.is_file() and output.stat().st_size > 1000 and not force:
         print(f"skip {output.relative_to(ROOT)} (already exists)", flush=True)
         return
     for attempt in range(1, 4):
         try:
-            samples, sample_rate = kokoro.create(words, voice=voice, speed=SPEED, lang="en-gb")
-            if not len(samples):
-                raise RuntimeError("Kokoro returned empty speech")
-            encode_mp3(samples, sample_rate, output)
+            parts = []
+            sample_rate = None
+            for passage in speech_chunks(words):
+                samples, rate = kokoro.create(passage, voice=voice, speed=SPEED, lang="en-gb")
+                if not len(samples):
+                    raise RuntimeError("Kokoro returned empty speech")
+                if sample_rate is not None and sample_rate != rate:
+                    raise RuntimeError("Unexpected sample rate change")
+                sample_rate = rate
+                parts.append(samples)
+                parts.append(np.zeros(int(rate * 0.12), dtype=np.float32))
+            if not parts:
+                raise RuntimeError("No text to synthesise")
+            combined = np.concatenate(parts)
+            encode_mp3(combined, sample_rate, output)
             print(f"saved {output.relative_to(ROOT)} ({output.stat().st_size:,} bytes)", flush=True)
             return
         except Exception as exc:
@@ -93,14 +125,17 @@ def main() -> None:
             ident = int(q["id"])
             q_path = prefix / "questions" / f"{ident:03d}.mp3"
             a_path = prefix / "answers" / f"{ident:03d}.mp3"
+            full_path = prefix / "answers-full" / f"{ident:03d}.mp3"
             print(f"[{voice} {i}/{len(questions)}] {q['question'][:70]}", flush=True)
             generate_one(kokoro, f"Question {ident}. {q['question']}", q_path, voice, args.force)
             generate_one(kokoro, f"Answer. {q['short']}", a_path, voice, args.force)
+            generate_one(kokoro, f"Answer. {q['full']}", full_path, voice, args.force)
     entries = [
         {
             "id": int(q["id"]),
             "question": f"audio/questions/{int(q['id']):03d}.mp3",
             "answer": f"audio/answers/{int(q['id']):03d}.mp3",
+            "answer_full": f"audio/answers-full/{int(q['id']):03d}.mp3",
         }
         for q in questions
     ]
@@ -110,7 +145,8 @@ def main() -> None:
         "voice": "bf_emma",
         "voices": [{"id": voice, "name": display_name, "accent": accent, "base": ("audio" if voice == "bf_emma" else f"audio/voices/{voice}")} for voice, display_name, accent in VOICES],
         "model": "Kokoro-82M-v1.0",
-        "answer_style": "short",
+        "answer_style": "short_and_full",
+        "answer_styles": ["short", "full"],
         "question_count": len(questions),
         "bank_sha256": bank_hash,
         "files": entries,
@@ -118,7 +154,7 @@ def main() -> None:
     (OUT_DIR / "manifest.json").write_text(
         json.dumps(manifest, indent=2, ensure_ascii=False) + "\n", encoding="utf-8"
     )
-    print(f"COMPLETE: {len(entries)} questions and {len(entries)} answers per voice × {len(VOICES)} voices", flush=True)
+    print(f"COMPLETE: {len(entries)} questions, short answers and uploaded full answers per voice × {len(VOICES)} voices", flush=True)
 
 
 if __name__ == "__main__":

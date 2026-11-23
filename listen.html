@@ -4,9 +4,9 @@
     <div>
       <span class="eyebrow">READY-TO-PLAY · BRITISH ENGLISH</span>
       <h2 id="saved-player-title">Listen to your interview answers</h2>
-      <p>Your 72 questions and answers are recorded in Kokoro's British English voice and saved as MP3 files. No voice model download, API key, or manual generation is required when listening.</p>
+      <p>Your 72 questions and answers are saved as MP3 recordings in British English. Press Play to listen immediately—no voice generation, API key or model download needed. Choose Emma, Isabella or George.</p>
     </div>
-    <div class="saved-voice-pill"><span aria-hidden="true">♫</span> Emma · Kokoro</div>
+    <div class="saved-voice-pill"><span aria-hidden="true">♫</span> <span id="saved-voice-label">Emma · Kokoro</span></div>
   </div>
 
   <div class="saved-player-layout">
@@ -30,23 +30,24 @@
       <progress id="saved-progress" max="1" value="0" aria-label="Questions completed"></progress>
       <div class="saved-transport">
         <button id="saved-prev" type="button" class="btn btn-outline" disabled>← Previous</button>
-        <button id="saved-play" type="button" class="btn btn-primary" disabled>▶ Play</button>
+        <button id="saved-play" type="button" class="btn btn-primary">▶ Play</button>
         <button id="saved-stop" type="button" class="btn btn-outline" disabled>Stop</button>
         <button id="saved-next" type="button" class="btn btn-primary">Next question →</button>
       </div>
       <audio id="saved-audio" controls preload="none" aria-label="Saved question and answer recordings"></audio>
-      <p class="saved-status" id="saved-status" role="status" aria-live="polite">Checking for saved recordings…</p>
+      <p class="saved-status" id="saved-status" role="status" aria-live="polite">Ready. Press Play to hear your question and answer.</p>
     </div>
 
     <aside class="saved-settings">
       <h3>Listening settings</h3>
+      <div class="field"><label for="saved-voice">Choose a British English voice</label><select id="saved-voice"><option value="bf_emma" selected>Emma · Female (ready)</option><option value="bf_isabella">Isabella · Female</option><option value="bm_george">George · Male</option></select></div>
       <div class="field"><label for="saved-topic">Select a topic</label><select id="saved-topic"><option value="all">All 72 questions</option></select></div>
       <div class="field"><label for="saved-rate">Playback speed</label><select id="saved-rate"><option value="0.8">Slow · 0.8×</option><option value="1" selected>Normal · 1×</option><option value="1.15">Faster · 1.15×</option></select></div>
       <div class="field"><label for="saved-think">Pause to think before the answer</label><select id="saved-think"><option value="0">No pause</option><option value="6" selected>6 seconds</option><option value="12">12 seconds</option><option value="20">20 seconds</option></select></div>
       <label class="saved-check" id="saved-repeat-label"><input type="checkbox" id="saved-repeat" checked><span><strong>Repeat this question</strong><small>Keep repeating the question and answer until I press Next.</small></span></label>
       <label class="saved-check"><input type="checkbox" id="saved-loop"><span><strong>Repeat the full list</strong><small>Start again at Question 1 after the final question.</small></span></label>
       <button type="button" class="btn btn-outline saved-reload" id="saved-reload">↻ Check recordings</button>
-      <p class="saved-note">Your answer is always shown below the question. Audio uses the short version; your original full answer is also visible. Repeat mode is on by default.</p>
+      <p class="saved-note">Your answer is always shown below the question. Audio reads the short answer, and your full original answer is visible. Repeat mode is on by default. Isabella and George are being added as saved voice choices; Emma is already available.</p>
     </aside>
   </div>
 </section>

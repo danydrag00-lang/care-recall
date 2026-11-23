@@ -55,17 +55,16 @@ This combines *retrieval practice* (remembering before viewing), *spaced practic
 - Carpenter et al., *The science of effective learning with spacing and retrieval practice* (Nature Reviews Psychology, 2022): https://www.nature.com/articles/s44159-022-00089-1
 - The Learning Scientists, spaced and retrieval practice FAQ: https://www.learningscientists.org/faq
 
-## ElevenLabs premium voice option (no API key needed)
+## Cartesia and TwoShot recordings (no API key needed in CareRecall)
 
-On **Listen & Learn**, scroll to **Hear the questions in an ElevenLabs voice**.
+On **Listen & Learn**, scroll to **Play Cartesia or TwoShot recordings**.
 
-1. Choose a batch of 4 questions and select the short or full answers.
-2. Click **Copy script** and open [ElevenLabs Text to Speech](https://elevenlabs.io/text-to-speech).
-3. Pick a voice there, paste the script, generate it, and download the MP3.
-4. Name the recording `01.mp3` (for questions 1–4), `02.mp3` (questions 5–8), and so on.
-5. Repeat for other batches. Under **Listen back to back**, select all MP3 recordings together. The player sorts them by filename and automatically plays them one after the other. Pause, skip, change speed, and loop as needed.
+1. Choose a batch of four questions, with short or full answers.
+2. Click **Copy script** or **Download script**. Paste it into [Cartesia](https://play.cartesia.ai/) or [TwoShot](https://twoshot.app/open-source-tts/).
+3. Generate and download an MP3 or WAV recording if the chosen service offers an audio export, subject to its usage limits.
+4. Name files `01.mp3`, `02.mp3` and so on. Select them in CareRecall's audio player to play them continuously, adjust speed or repeat the playlist.
 
-The recordings stay in your own browser: the site only holds temporary object URLs for selected files, not copies on a server. If you reload the page, you will need to select the MP3s again. Keep the tab open to listen. Generation and download happen entirely at ElevenLabs using your account; **CareRecall does not provide ElevenLabs voices directly**, does not automatically call their API and does not require an API key. ElevenLabs free credits may not cover every script; review their current usage and licensing terms.
+Audio files selected in CareRecall remain in the browser, not on a server. Reloading the page clears the selected recordings. You can also listen immediately using the built-in device voices or optional Kokoro local model.
 
 ## Listen & Learn voice — important detail
 

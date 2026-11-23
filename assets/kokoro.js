@@ -81,7 +81,7 @@
   async function listenTo(text, id) {
     for (const chunk of chunks(text)) {
       if (!running || session !== id) return false;
-      status("Generating speech on your device…");
+      status("Generating Kokoro AI speech…");
       let audioData;
       try { audioData = await engine.generate(chunk, { voice: voice.value, speed: Number(rate.value) || 1 }); }
       catch (e) { status("Speech generation failed: " + (e?.message || "unknown error")); return false; }

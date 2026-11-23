@@ -102,7 +102,15 @@
     }
     count.textContent = "Question " + (index + 1) + " of " + items.length + " · Q" + q.id;
     question.textContent = q.question;
-    if (!jumpSearch.value.trim() && [...jumpSelect.options].some(option => option.value === String(q.id))) jumpSelect.value = String(q.id);
+    const inJumpOptions = [...jumpSelect.options].some(option => option.value === String(q.id));
+    if (!inJumpOptions && jumpSearch.value.trim()) {
+      // Pressing Next after a searched jump must not leave the old search result selected.
+      jumpSearch.value = "";
+      populateJumpList();
+    }
+    if ([...jumpSelect.options].some(option => option.value === String(q.id))) {
+      jumpSelect.value = String(q.id);
+    }
     answer.textContent = answerText(q);
     answerKind.textContent = answerMode === "full" ? "MY UPLOADED ANSWER" : "SHORT ANSWER";
     progress.value = items.length ? index / items.length : 0;

@@ -1,5 +1,5 @@
-/* CareRecall v13 — network-first static assets, direct streaming of saved MP3s. */
-const CACHE='care-recall-v15';
+/* CareRecall v16 — refreshed Study Room styling with direct MP3 streaming. */
+const CACHE='care-recall-v16';
 const ASSETS=['./','./index.html','./practice.html','./listen.html','./library.html','./assets/style.css','./assets/data.js','./assets/app.js','./assets/saved-audio.js','./assets/favicon.svg','./manifest.webmanifest'];
 self.addEventListener('install',e=>{
   e.waitUntil(caches.open(CACHE).then(c=>c.addAll(ASSETS)));

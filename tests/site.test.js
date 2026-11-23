@@ -231,6 +231,20 @@ test("repeat mode does not advance to next question until Next is clicked", () =
   assert.equal(h.get("saved-audio").src, "audio/questions/002.mp3");
 });
 
+test("Play answer only repeats only the chosen answer until Next", () => {
+  const h = harness();
+  h.click("saved-play-answer");
+  assert.equal(h.get("saved-audio").src, "audio/answers/001.mp3");
+  h.endAudio();
+  h.advanceTimeout();
+  assert.equal(h.get("saved-audio").src, "audio/answers/001.mp3");
+  h.click("saved-next");
+  assert.equal(h.get("saved-audio").src, "audio/answers/002.mp3");
+  h.click("saved-stop");
+  h.click("saved-play");
+  assert.equal(h.get("saved-audio").src, "audio/questions/002.mp3");
+});
+
 test("missing Isabella full MP3 explains error and offers a working Emma fallback", async () => {
   const h = harness({unavailable:url => url.includes("/voices/") || url.includes("answers-full/")});
   h.change("saved-voice", "bf_isabella");

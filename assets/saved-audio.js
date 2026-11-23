@@ -66,9 +66,11 @@
         checkedReady = true;
         availabilityLabel.textContent = "✓ Ready to play: " + selectedName() + ".";
         fallback.hidden = true;
+        if (!active) setStatus("Ready to hear " + selectedName() + ". Press Play answer only or Play question & answer.");
       } else {
         tellNotReady("Audio not published yet: " + selectedName() +
           ". You can still read this answer. Choose Emma + Short answer to listen immediately.");
+        if (!active) setStatus("The selected recording is not published yet. You can read this answer or play an available short recording.");
       }
     } catch(err) {
       if(requestNumber !== availabilityCheck) return;
@@ -326,8 +328,7 @@
     render();
     if (items.length) src("answer");
     const label = answerMode === "full" ? "your uploaded answer" : "the short answer";
-    setStatus("Showing " + label + ". Press Play answer only or Play question & answer to hear this version." +
-      (answerMode === "full" && !manifest?.answer_styles?.includes("full") ? " Full-answer audio may still be publishing." : ""));
+    setStatus("Showing " + label + ". Checking the selected MP3 recording; you can play it as soon as the audio status says Ready.");
   }
   shortButton.addEventListener("click", () => selectAnswer("short"));
   fullButton.addEventListener("click", () => selectAnswer("full"));

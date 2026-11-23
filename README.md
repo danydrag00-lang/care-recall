@@ -7,10 +7,10 @@ A responsive, no-subscription website that helps you recall **72 care assistant 
 - **Dashboard:** progress, confidence, reviews due, seven-day activity and a suggested study method.
 - **Recall Practice:** unexpected questions, answer before revealing, short natural answers, 3 recall cues, original answers, self-rating and scheduled follow-up practice.
 - **Mock Interview:** mixed topics, 60-second countdown and optional speech dictation of your own response.
-- **Listen & Learn:** reads a question, optionally waits while you answer aloud, reads the answer and automatically continues. Choose a topic, UK English voice (where available), short/full answer, speed, shuffle, repeats, and transcript visibility.
+- **Listen & Learn:** uses Kokoro AI British English voices to read questions, pause for your answer, read model answers and continue automatically. Choose topics, answer length, speed and shuffle. Cartesia and TwoShot recordings can also be loaded as an MP3/WAV playlist.
 - **Question Library:** search all 72 questions and browse nine families of questions that share similar answer approaches.
-- **Private progress:** no login, server, database, ads, third-party scripts or API keys. Review history is stored in your browser's local storage. Export and import it as a JSON file to back it up.
-- **Installable/offline:** when served over HTTPS, the included service worker caches website assets for offline use after the first load. Voice playback availability offline depends on your device's voices.
+- **Private progress:** no CareRecall login, database, ads or embedded API keys. Review history is stored in your browser's local storage. Export and import a JSON backup. Kokoro's code and model download from external public hosting when you use that option.
+- **Installable/offline:** when served over HTTPS, the service worker caches the website's static files. Kokoro's external model requires an initial download and may not work offline; previously selected audio files must be loaded again after a page reload.
 
 ## Open it right now
 
@@ -67,18 +67,13 @@ On **Listen & Learn**, scroll to **Play Cartesia or TwoShot recordings**.
 3. Generate and download an MP3 or WAV recording if the chosen service offers an audio export, subject to its usage limits.
 4. Name files `01.mp3`, `02.mp3` and so on. Select them in CareRecall's audio player to play them continuously, adjust speed or repeat the playlist.
 
-Audio files selected in CareRecall remain in the browser, not on a server. Reloading the page clears the selected recordings. You can also listen immediately using the built-in device voices or optional Kokoro local model.
+Audio files selected in CareRecall remain in the browser, not on a server. Reloading the page clears the selected recordings. You can also use Kokoro to generate speech locally in a supported browser after the voice model downloads.
 
-## Listen & Learn voice — important detail
+## Listen & Learn voices
 
-The audio page uses the **Web Speech API speech synthesis voices installed on or supplied by your browser/device**. They are **generated speech**, not recordings of a real human. A device that offers natural-sounding British English voices may sound close to a professional narrator; a different device may sound more computer-like.
+The browser/device speech-synthesis voice selector has been removed. CareRecall now uses **Kokoro neural TTS** as the native speech player; its English voices generate speech locally after model loading. The model and JavaScript library are fetched from external hosts on first use and performance depends on the device and browser. If it fails, you can load audio files generated externally with Cartesia or TwoShot into the MP3/WAV player.
 
-- Try a voice marked `en-GB` with a natural, premium or enhanced description.
-- On macOS, additional voices may be available under **System Settings → Accessibility → Spoken Content → System Voice → Manage Voices** (menu names depend on macOS version). After installing voices, restart the browser.
-- On iOS / iPadOS, available voices depend on device settings, browser and version.
-- Some mobile browsers stop speech if the display locks or the browser moves into the background. Keep the website open and screen active for reliable listening.
-- If voices are missing, allow the page to load and reopen the voice menu; try another browser. No API key is needed.
-- The **Dictate** button on the practice page is separate: it uses speech recognition if supported. Your browser **may send speech to a service** to transcribe it. Never dictate resident names or personal medical information.
+The **Dictate** button on the practice page is separate: it uses speech recognition if supported. Your browser **may send speech to a service** to transcribe it. Never dictate resident names or personal medical information.
 
 ## Safety and accuracy
 
@@ -96,7 +91,7 @@ Useful UK references:
 care-recall-website/
 ├── index.html                 # Dashboard
 ├── practice.html              # Recall, random and timed mock
-├── listen.html                # Continuous UK English voice playback
+├── listen.html                # Kokoro and optional imported MP3 playback
 ├── library.html               # Searchable Q&A and similar groups
 ├── manifest.webmanifest       # Installable web app metadata
 ├── sw.js                      # Cache for offline use on HTTPS
@@ -114,4 +109,4 @@ care-recall-website/
 - Questions are stored in `window.CARE_DATA` from `assets/data.js`.
 - The browser stores reviews under `care-recall-progress-v1` in `localStorage`.
 - If you change any file after publishing, change `CACHE` in `sw.js` from `care-recall-v1` to a new version to ensure the offline cache updates.
-- The audio sequence was tested with a simulated voice. Live voice quality depends on the browser and operating system.
+- Kokoro speech quality and inference performance depend on the user's browser and device. The model downloads separately on first use.

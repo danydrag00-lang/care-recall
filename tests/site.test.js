@@ -257,6 +257,14 @@ test("browser playback rejection resets the Play button so a retry is possible",
   assert.equal(h.get("saved-stop").disabled, false);
 });
 
+test("service worker never caches streamed audio or partial HTTP responses", () => {
+  const worker = fs.readFileSync(path.join(ROOT, "sw.js"), "utf8");
+  assert.match(worker, /url\.pathname\.includes\('\/audio\/'\)/);
+  assert.match(worker, /request\.headers\.has\('range'\)/);
+  assert.match(worker, /response\.status===200/);
+  assert.match(worker, /\.catch\(\(\)=>\{\}\)/);
+});
+
 test("no device speech synthesis or external voice-service UI remains", () => {
   assert(!/id="voice-select"|speechSynthesis|ElevenLabs|Voicebox|TwoShot|Cartesia/.test(page));
   assert(page.includes('id="saved-answer-short"'));

@@ -9,7 +9,8 @@
   if (!$("saved-play")) return;
   const play = $("saved-play"), playAnswer = $("saved-play-answer"), stop = $("saved-stop"), next = $("saved-next"), prev = $("saved-prev");
   const audio = $("saved-audio"), status = $("saved-status"), question = $("saved-question");
-  const answer = $("saved-answer"), original = $("saved-full-answer");
+  const answer = $("saved-answer"), answerKind = $("saved-answer-kind");
+  const shortButton = $("saved-answer-short"), fullButton = $("saved-answer-full");
   const count = $("saved-position"), stageLabel = $("saved-stage"), progress = $("saved-progress");
   const topic = $("saved-topic"), rate = $("saved-rate"), think = $("saved-think");
   const repeat = $("saved-repeat"), playlistLoop = $("saved-loop"), reload = $("saved-reload");
@@ -17,6 +18,7 @@
   const VOICES = { bf_emma: "Emma", bf_isabella: "Isabella", bm_george: "George" };
   const all = window.CARE_DATA?.questions ?? [];
   let items = [], index = 0, available = true, active = false, paused = false;
+  let answerMode = "short";
   let stage = "idle", gapTimer = null, gapStart = 0, gapRemaining = 0, gapTarget = null, generation = 0;
   let currentAudio = "";
   let manifest = null;
@@ -25,13 +27,18 @@
   const filePath = (kind, id) => {
     const selected = Object.hasOwn(VOICES, voice.value) ? voice.value : "bf_emma";
     const root = selected === "bf_emma" ? "audio/" : "audio/voices/" + selected + "/";
-    return root + (kind === "question" ? "questions/" : "answers/") + String(id).padStart(3,"0") + ".mp3";
+    const folder = kind === "question" ? "questions/" : (answerMode === "full" ? "answers-full/" : "answers/");
+    return root + folder + String(id).padStart(3,"0") + ".mp3";
   };
-  const answerText = q => q.short ?? "";
+  const answerText = q => (answerMode === "full" ? q.full : q.short) ?? "";
   function timerClear() { if (gapTimer !== null) clearTimeout(gapTimer); gapTimer = null;gapTarget = null; gapRemaining = 0; }
   function ui() {
     play.disabled = !items.length;
     playAnswer.disabled = !items.length;
+    shortButton.classList.toggle("is-active", answerMode === "short");
+    fullButton.classList.toggle("is-active", answerMode === "full");
+    shortButton.setAttribute("aria-pressed",String(answerMode === "short"));
+    fullButton.setAttribute("aria-pressed",String(answerMode === "full"));
     stop.disabled = !active;
     next.disabled = !items.length;
     prev.disabled = index <= 0;
@@ -43,7 +50,6 @@
     if (!q) {
       question.textContent = "No questions in this topic";
       answer.textContent = "Choose another topic.";
-      original.textContent = "";
       count.textContent = "0 of 0";
       progress.value = 0;
       ui();return;
@@ -51,7 +57,7 @@
     count.textContent = "Question " + (index + 1) + " of " + items.length + " · Q" + q.id;
     question.textContent = q.question;
     answer.textContent = answerText(q);
-    original.textContent = q.full ?? "";
+    answerKind.textContent = answerMode === "full" ? "MY UPLOADED ANSWER" : "SHORT ANSWER";
     progress.value = items.length ? index / items.length : 0;
     ui();
   }
@@ -170,6 +176,19 @@
   stop.addEventListener("click",() => {stopped();render();if(available)src("question");setStatus("Stopped. Press Play to begin again.");});
   next.addEventListener("click",() => move(1,true));
   prev.addEventListener("click",() => move(-1,true));
+  function selectAnswer(nextMode) {
+    if (nextMode !== "short" && nextMode !== "full") return;
+    if (nextMode === answerMode) return;
+    stopped();
+    answerMode = nextMode;
+    render();
+    if (items.length) src("answer");
+    const label = answerMode === "full" ? "your uploaded answer" : "the short answer";
+    setStatus("Showing " + label + ". Press Play answer only or Play question & answer to hear this version." +
+      (answerMode === "full" && !manifest?.answer_styles?.includes("full") ? " Full-answer audio may still be publishing." : ""));
+  }
+  shortButton.addEventListener("click", () => selectAnswer("short"));
+  fullButton.addEventListener("click", () => selectAnswer("full"));
   topic.addEventListener("change",changeTopic);
   voice.addEventListener("change", () => {
     stopped();
@@ -181,7 +200,7 @@
   playlistLoop.addEventListener("change",ui);
   audio.addEventListener("ended",onEnd);
   audio.addEventListener("error",() => {
-    if (active) {stopped();setStatus("This recording is not yet available. If you selected Isabella or George, choose Emma or check again once the new recordings are published.");}
+    if (active) {stopped();setStatus("This " + (answerMode === "full" ? "uploaded-answer" : "short-answer") + " recording for " + (VOICES[voice.value] || "Emma") + " is not available yet. Your selected answer remains visible. Try again after GitHub finishes generating the audio.");}
   });
   window.addEventListener("pagehide",() => stopped());
   async function checkSavedAudio() {
@@ -197,7 +216,7 @@
       manifest = payload;
       available = true;
       const chosen = VOICES[voice.value] || "Emma";
-      setStatus("Ready · " + chosen + " · " + all.length + " saved questions and answers. Press Play.");
+      setStatus("Ready · " + chosen + " · " + all.length + " saved questions and answers. Press Play." + (answerMode === "full" && !payload.answer_styles?.includes("full") ? " Full-answer audio is still being prepared." : ""));
     } catch (err) {
       // The manifest is optional: a working MP3 must never be blocked by a failed check.
       setStatus("Press Play to listen. If a recording is missing, choose Emma or use Check recordings again.");

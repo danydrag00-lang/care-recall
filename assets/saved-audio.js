@@ -7,7 +7,7 @@
   "use strict";
   const $ = id => document.getElementById(id);
   if (!$("saved-play")) return;
-  const play = $("saved-play"), stop = $("saved-stop"), next = $("saved-next"), prev = $("saved-prev");
+  const play = $("saved-play"), playAnswer = $("saved-play-answer"), stop = $("saved-stop"), next = $("saved-next"), prev = $("saved-prev");
   const audio = $("saved-audio"), status = $("saved-status"), question = $("saved-question");
   const answer = $("saved-answer"), original = $("saved-full-answer");
   const count = $("saved-position"), stageLabel = $("saved-stage"), progress = $("saved-progress");
@@ -31,10 +31,11 @@
   function timerClear() { if (gapTimer !== null) clearTimeout(gapTimer); gapTimer = null;gapTarget = null; gapRemaining = 0; }
   function ui() {
     play.disabled = !items.length;
+    playAnswer.disabled = !items.length;
     stop.disabled = !active;
     next.disabled = !items.length;
     prev.disabled = index <= 0;
-    play.textContent = active && !paused ? "❚❚ Pause" : (active && paused ? "▶ Resume" : "▶ Play");
+    play.textContent = active && !paused ? "❚❚ Pause" : (active && paused ? "▶ Resume" : "▶ Play question & answer");
     stageLabel.textContent = stage === "question" ? "QUESTION" : stage === "answer" ? "ANSWER" : stage === "thinking" ? "TIME TO THINK" : "READY";
   }
   function render() {
@@ -160,6 +161,11 @@
     if (!items.length) {setStatus("Choose a topic containing questions.");return;}
     if (active) {if (paused) resumeIt();else pauseIt();return;}
     active = true;paused = false;startQuestion();
+  });
+  playAnswer.addEventListener("click", () => {
+    if (!items.length) return;
+    stopped(); active = true; paused = false;
+    startAnswer();
   });
   stop.addEventListener("click",() => {stopped();render();if(available)src("question");setStatus("Stopped. Press Play to begin again.");});
   next.addEventListener("click",() => move(1,true));

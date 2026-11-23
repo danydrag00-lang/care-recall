@@ -270,6 +270,10 @@ test("retries an Emma uploaded-answer recording when it becomes published", asyn
   await h.flush();
   assert.equal(h.get("saved-audio").src, "audio/answers-full/001.mp3");
   assert.equal(h.get("saved-audio").playing, true);
+  // The previously cached warning is only informational; a click starts
+  // directly. Checking recordings updates the status after publication.
+  h.click("saved-reload");
+  await h.flush();
   assert.match(h.get("saved-availability").textContent, /Ready to play/);
 });
 

@@ -55,6 +55,10 @@ This combines *retrieval practice* (remembering before viewing), *spaced practic
 - Carpenter et al., *The science of effective learning with spacing and retrieval practice* (Nature Reviews Psychology, 2022): https://www.nature.com/articles/s44159-022-00089-1
 - The Learning Scientists, spaced and retrieval practice FAQ: https://www.learningscientists.org/faq
 
+## Study Room — calm, focused listening
+
+The `listen.html` page is designed like a compact study desk rather than an audio-production dashboard: one question, its selected answer, and a single prominent Play control. The Play, Next, Back, answer-only and repeat-until-Next controls remain visible. Question jumping and study preferences are available inside compact expandable panels, not large sidebar widgets. **Focus mode** hides navigation while you study; press Escape or Exit focus to return to the normal layout. The default page shows answers immediately, rather than hiding them behind recall mode.
+
 ## Listen & Learn: choose which answer to read and hear
 
 Every question now includes two clickable answer choices directly above the answer text:
@@ -62,11 +66,11 @@ Every question now includes two clickable answer choices directly above the answ
 - **Short answer** displays the concise interview-ready version from `q.short`.
 - **My uploaded answer** displays the complete original answer from `q.full`, as supplied by the learner. This is not rewritten or shortened.
 
-Selecting an option immediately updates the displayed answer. Press **Play question & answer** or **Play answer only** to hear that same selected version in the chosen Kokoro British English voice. The audio is pre-generated and saved as ordinary static MP3 recordings, so website visitors do not have to generate speech or use an API key.
+Selecting an option immediately updates the displayed answer. Press **Play** or **Play answer only** to hear that same selected version in the chosen Kokoro British English voice. The audio is pre-generated and saved as ordinary static MP3 recordings, so website visitors do not have to generate speech or use an API key.
 
-**Repeat this question** is enabled by default. This repeats the question and whichever answer type is selected until the learner presses **Next question**. Disable it to advance automatically after each answer.
+**Repeat until Next** is enabled by default. This repeats the question and whichever answer type is selected until the learner presses **Next question**. Disable it to advance automatically after each answer.
 
-Audio files use `audio/questions/001.mp3` for the Emma question, `audio/answers/001.mp3` for Emma's short answer, and `audio/answers-full/001.mp3` for Emma's complete original answer. Isabella and George use analogous paths under `audio/voices/<voice_id>/`. All three voice versions are created by `tools/generate_kokoro_audio.py` and saved by `.github/workflows/build-kokoro-audio.yml`. The build uses manageable segments for long original answers to avoid truncating their text. New answer audio becomes available once the GitHub Action finishes and GitHub Pages publishes the files; the selected answer text is available immediately regardless of the audio build status.
+Audio files use `audio/questions/001.mp3` for the Emma question, `audio/answers/001.mp3` for Emma's short answer, and `audio/answers-full/001.mp3` for Emma's complete original answer. Isabella and George use analogous paths under `audio/voices/<voice_id>/`. All three voice versions are created by `tools/generate_kokoro_audio.py` and saved by `.github/workflows/build-kokoro-audio.yml`. The build uses manageable segments for long original answers to avoid truncating their text. All 72 complete answers are published for each of the three Kokoro voices; the matching MP3 is played directly from GitHub Pages, and the selected answer text appears immediately.
 
 **Privacy:** The website repository is public, and `assets/data.js` already includes the original answers. Saved recordings of those answers will also be publicly accessible. Do not use personal or confidential details you would not want to publish.
 

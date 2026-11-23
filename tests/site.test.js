@@ -259,6 +259,20 @@ test("missing Isabella full MP3 explains error and offers a working Emma fallbac
   assert.equal(h.get("saved-audio").src, "audio/answers/001.mp3");
 });
 
+test("retries an Emma uploaded-answer recording when it becomes published", async () => {
+  let missing = true;
+  const h = harness({unavailable: url => missing && url.includes("answers-full/")});
+  h.click("saved-answer-full");
+  await h.flush();
+  assert.match(h.get("saved-availability").textContent, /not published/);
+  missing = false;
+  h.click("saved-play-answer");
+  await h.flush();
+  assert.equal(h.get("saved-audio").src, "audio/answers-full/001.mp3");
+  assert.equal(h.get("saved-audio").playing, true);
+  assert.match(h.get("saved-availability").textContent, /Ready to play/);
+});
+
 test("browser playback rejection resets the Play button so a retry is possible", async () => {
   const o = {rejectNextPlay: true};
   const h = harness(o);

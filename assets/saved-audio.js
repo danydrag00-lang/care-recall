@@ -303,16 +303,30 @@
   for(const cat of [...new Set(all.map(q => q.category).filter(Boolean))]) {
     const opt=document.createElement("option");opt.value=cat;opt.textContent=cat;topic.appendChild(opt);
   }
-  play.addEventListener("click",() => {
+  async function retryMissingRecording() {
+    // A previously missing MP3 might have been published without a page refresh.
+    if (checkedReady !== false) return true;
+    const itemId = items[index]?.id;
+    const activeVoice = voice.value, selectedMode = answerMode;
+    setStatus("Checking whether the selected recording has just been published…");
+    await checkCurrentAudio();
+    if (itemId !== items[index]?.id || activeVoice !== voice.value || selectedMode !== answerMode) return false;
+    if (checkedReady === false) {
+      setStatus("This full-answer audio is not published yet. Your text is visible, or you can play an available short answer.");
+      return false;
+    }
+    return true;
+  }
+  play.addEventListener("click",async() => {
     if (!items.length) {setStatus("Choose a topic containing questions.");return;}
-    if (!active && checkedReady === false) { setStatus("The selected recording is not published yet. Choose Emma with Short answer to listen now."); return; }
     if (active) {if (paused) resumeIt();else pauseIt();return;}
+    if (checkedReady === false && !await retryMissingRecording()) return;
     answerOnlyMode = false;
     active = true;paused = false;startQuestion();
   });
-  playAnswer.addEventListener("click", () => {
+  playAnswer.addEventListener("click", async() => {
     if (!items.length) return;
-    if (checkedReady === false) { setStatus("The selected recording is not published yet. Choose Emma with Short answer to listen now."); return; }
+    if (checkedReady === false && !await retryMissingRecording()) return;
     stopped(); answerOnlyMode = true; active = true; paused = false;
     startAnswer();
   });

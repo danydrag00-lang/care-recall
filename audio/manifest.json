@@ -1,12 +1,12 @@
 {
-  "version": 2,
+  "version": 3,
   "voice": "bf_emma",
   "voices": [
     {
       "id": "bf_emma",
+      "base": "audio",
       "name": "Emma",
       "accent": "British female",
-      "base": "audio",
       "answer_styles": [
         "short",
         "full"
@@ -14,20 +14,22 @@
     },
     {
       "id": "bf_isabella",
+      "base": "audio/voices/bf_isabella",
       "name": "Isabella",
       "accent": "British female",
-      "base": "audio/voices/bf_isabella",
       "answer_styles": [
-        "short"
+        "short",
+        "full"
       ]
     },
     {
       "id": "bm_george",
+      "base": "audio/voices/bm_george",
       "name": "George",
       "accent": "British male",
-      "base": "audio/voices/bm_george",
       "answer_styles": [
-        "short"
+        "short",
+        "full"
       ]
     }
   ],

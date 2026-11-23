@@ -46,7 +46,17 @@ jobs:
           node --check assets/data.js
           node --check sw.js
       - name: Test listening player and question navigation
-        run: node --test tests/site.test.js
+        run: node --test tests/*.test.js
+      - name: Verify browser Kokoro module CDN is reachable
+        run: |
+          if curl -fLsS -I --retry 2 --max-time 25 'https://cdn.jsdelivr.net/npm/kokoro-js@1.2.1/+esm' -o /dev/null; then
+            echo 'Kokoro.js module CDN is available.'
+          elif curl -fLsS -I --retry 2 --max-time 25 'https://esm.sh/kokoro-js@1.2.1?bundle' -o /dev/null; then
+            echo 'Kokoro.js fallback CDN is available.'
+          else
+            echo 'Neither Kokoro module CDN is currently reachable.' >&2
+            exit 1
+          fi
       - name: Check live GitHub Pages and saved MP3 streaming
         run: |
           set -e

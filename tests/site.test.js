@@ -16,6 +16,8 @@ const questions = bank.questions;
 function harness(options = {}) {
   const els = new Map();
   const pending = new Map();
+  const bodyClasses = new Set();
+  const windowListeners = {};
   let timerId = 0;
   const recordedFetches = [];
   const unavailable = options.unavailable || (() => false);
@@ -52,6 +54,7 @@ function harness(options = {}) {
           return Promise.resolve();
         },
         scrollIntoView() { this.scrolled = true; },
+        focus() { this.focused = true; },
       };
       els.set(id, item);
     }
@@ -68,11 +71,17 @@ function harness(options = {}) {
     document: {
       getElementById: get,
       createElement: () => ({value: "", textContent: ""}),
+      body: {
+        classList: {
+          toggle(name,on) { if(on) bodyClasses.add(name); else bodyClasses.delete(name); },
+          contains(name) { return bodyClasses.has(name); }
+        }
+      },
     },
     window: {
       CARE_DATA: bank,
       location: {search: options.search || ""},
-      addEventListener() {},
+      addEventListener(event,fn) { windowListeners[event] = fn; },
     },
     fetch: async (url, args = {}) => {
       const address = String(url);
@@ -131,7 +140,7 @@ function harness(options = {}) {
     pending.delete(first[0]);
     first[1]();
   }
-  return {get, click, change, input, flush, endAudio, advanceTimeout, recordedFetches, options};
+  return {get, click, change, input, flush, endAudio, advanceTimeout, recordedFetches, options, bodyClasses, windowListeners};
 }
 
 test("question data and listening markup are complete", () => {
@@ -144,6 +153,28 @@ test("question data and listening markup are complete", () => {
   assert(page.includes('id="saved-repeat" checked'));
   assert(page.includes('id="saved-answer-full"'));
   assert(page.includes('id="saved-jump-search"'));
+});
+
+test("Study Room is compact with collapsed question search and study preferences", () => {
+  assert.match(page, /<main class="main study-main"/);
+  assert.match(page, /<details class="saved-jump" id="study-jump">/);
+  assert.match(page, /<details class="study-settings" id="study-settings">/);
+  assert.match(page, /id="study-focus"[^>]*aria-pressed="false"/);
+  assert(page.indexOf('class="study-player"') < page.indexOf('class="saved-answer-box"'));
+  assert(page.includes('id="saved-answer-short"') && page.includes('id="saved-answer-full"'));
+  assert(!page.includes('<div class="saved-player-layout">'));
+});
+
+test("Focus mode hides distractions and Escape restores the normal layout", () => {
+  const h = harness();
+  assert.equal(h.get("study-focus").attributes["aria-pressed"], undefined);
+  h.click("study-focus");
+  assert.equal(h.bodyClasses.has("study-focused"), true);
+  assert.equal(h.get("study-focus").attributes["aria-pressed"], "true");
+  h.windowListeners.keydown({key:"Escape"});
+  assert.equal(h.bodyClasses.has("study-focused"), false);
+  assert.equal(h.get("study-focus").attributes["aria-pressed"], "false");
+  assert.equal(h.get("study-focus").focused, true);
 });
 
 test("all 72 questions appear in direct jump selector", async () => {

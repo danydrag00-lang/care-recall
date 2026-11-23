@@ -431,6 +431,38 @@
   }
   shortButton.addEventListener("click", () => selectAnswer("short"));
   fullButton.addEventListener("click", () => selectAnswer("full"));
+  editToggle.addEventListener("click",()=>{
+    const q=items[index];if(!q)return;
+    if(!editForm.hidden){closeEditForm();return;}
+    stopped();
+    editText.value=answerText(q);
+    editFeedback.textContent="Your revision stays in this browser. Saving automatically updates its Kokoro voice.";
+    editForm.hidden=false;
+    editToggle.setAttribute("aria-expanded","true");
+    editText.focus();
+  });
+  editCancel.addEventListener("click",()=>closeEditForm());
+  editForm.addEventListener("submit",event=>{
+    event.preventDefault();
+    const q=items[index];if(!q||!edits)return;
+    try{
+      const result=edits.save(q.id,answerMode,editText.value);
+      stopped();closeEditForm();render();
+      editFeedback.textContent=result.saved?"Saved privately in this browser.":"Updated for this session; browser storage may be blocked.";
+      if(result.changed){
+        setStatus("Answer saved. Kokoro is updating the voice automatically…");
+        void prepareRevision(q,true);
+      }else{
+        setStatus("Original answer restored. The ready-made recording is available.");
+      }
+    }catch(error){editFeedback.textContent=String(error.message||error);}
+  });
+  editReset.addEventListener("click",()=>{
+    const q=items[index];if(!q||!edits)return;
+    edits.reset(q.id,answerMode);
+    stopped();closeEditForm();render();
+    setStatus("Original answer restored with its saved recording.");
+  });
   topic.addEventListener("change",changeTopic);
   voice.addEventListener("change", () => {
     stopped();
@@ -454,8 +486,9 @@
   // Real playback is authoritative: clear an earlier 404 once audio truly plays.
   audio.addEventListener("playing",() => {
     if (stage === "answer") {
-      checkedReady = true;
-      availabilityLabel.textContent = "✓ Playing saved audio: " + selectedName() + ".";
+      checkedReady=true;
+      availabilityLabel.textContent=hasPersonalEdit(items[index])
+        ?"✓ Playing your updated answer.":"✓ Playing saved audio: "+selectedName()+".";
       fallback.hidden = true;
     }
   });
@@ -463,6 +496,11 @@
   audio.addEventListener("error",() => {
     if (active) {
       stopped();
+      if(hasPersonalEdit(items[index])){
+        availabilityLabel.textContent="Could not play your updated narration. Your text is saved; retry Play.";
+        setStatus("The edited narration could not play on this browser. Retry Play when the Kokoro audio is ready.");
+        return;
+      }
       tellNotReady("Audio not published yet: " + selectedName() + ". Your answer text is still visible. Choose Emma + Short answer to listen now.");
       setStatus("The requested MP3 is missing. Use the available Emma short-answer recording or retry after audio publishing completes.");
     }

@@ -23,53 +23,42 @@
   </div>
   <p class="kokoro-credit">Based on <a href="https://github.com/hexgrad/kokoro" target="_blank" rel="noopener noreferrer">Kokoro</a> and <a href="https://www.npmjs.com/package/kokoro-js" target="_blank" rel="noopener noreferrer">kokoro-js</a> (Apache 2.0). Model files are downloaded from Hugging Face and app code from jsDelivr. Your question text is processed in this browser, not submitted to a paid voice service.</p>
 </section>
-<section class="surface voicebox-section" aria-labelledby="voicebox-title">
-  <span class="eyebrow">VOICEBOX · OPEN-SOURCE DESKTOP OPTION</span>
-  <h2 id="voicebox-title">Make full-length lessons with Voicebox</h2>
-  <p><strong>Voicebox</strong> is a free, locally installed AI voice studio for Mac and Windows. Download a ready-to-read script with your 72 interview questions and answers, open it in Voicebox, select a natural voice, and generate an audio recording. You can then listen to the recordings here without limits or an API key.</p>
-  <div class="voicebox-actions">
-    <button id="voicebox-export-short" type="button" class="btn btn-primary">↓ Download short-answer script</button>
-    <button id="voicebox-export-full" type="button" class="btn btn-outline">↓ Download full-answer script</button>
-    <a class="btn btn-ghost" href="https://voicebox.sh" target="_blank" rel="noopener noreferrer">Get Voicebox for Mac or Windows ↗</a>
-  </div>
-  <p class="eleven-help">Voicebox automatically breaks long narration into smaller chunks. Download the script, open Voicebox, choose a preset voice or your own authorised voice recording, generate audio and save it. Upload MP3 or WAV files using the player below. Voicebox runs locally on your computer and needs a model download and sufficient processing resources; it doesn't run inside GitHub Pages.</p>
-</section>
-<section class="surface elevenlabs-section" aria-labelledby="elevenlabs-title">
-  <div class="elevenlabs-intro">
+<section class="surface recording-section" aria-labelledby="recording-title">
+  <div class="recording-intro">
     <span class="eyebrow">VOICE STUDIO · OPTIONAL</span>
-    <h2 id="elevenlabs-title">Play Cartesia, TwoShot, ElevenLabs or Voicebox recordings</h2>
-    <p>Generate recordings with Cartesia Sonic, TwoShot, ElevenLabs or Voicebox, then play them back to back here. The regular device voice remains available for free.</p>
+    <h2 id="recording-title">Play Cartesia or TwoShot recordings</h2>
+    <p>Generate recordings with Cartesia or TwoShot, then play them back to back here. The free device voice remains available.</p>
   </div>
-  <div class="elevenlabs-grid">
-    <div class="elevenlabs-panel">
-      <div class="elevenlabs-step"><span>01</span><div><h3>Prepare your narration</h3><p>Copy a ready-to-read script for Cartesia, TwoShot or ElevenLabs. Each batch contains four questions, helping you manage free-tier limits.</p></div></div>
-      <div class="elevenlabs-fields">
-        <div class="field"><label for="eleven-batch">Question batch</label><select id="eleven-batch"></select></div>
-        <div class="field"><label for="eleven-version">Answer style</label><select id="eleven-version"><option value="short">Short answers (recommended)</option><option value="full">Full answers</option></select></div>
+  <div class="recording-grid">
+    <div class="recording-panel">
+      <div class="recording-step"><span>01</span><div><h3>Prepare your narration</h3><p>Copy a ready-to-read script for Cartesia or TwoShot. Each batch contains four questions, helping you manage free-tier limits.</p></div></div>
+      <div class="recording-fields">
+        <div class="field"><label for="recording-batch">Question batch</label><select id="recording-batch"></select></div>
+        <div class="field"><label for="recording-version">Answer style</label><select id="recording-version"><option value="short">Short answers (recommended)</option><option value="full">Full answers</option></select></div>
       </div>
-      <p id="eleven-count" class="eleven-count" aria-live="polite"></p>
-      <textarea id="eleven-script" readonly aria-label="Narration script for TwoShot or ElevenLabs" rows="8" spellcheck="false"></textarea>
-      <div class="eleven-buttons"><button id="eleven-copy" type="button" class="btn btn-primary">Copy script</button><button id="eleven-save-text" type="button" class="btn btn-outline">Download script</button></div>
-      <div class="voicebox-actions"><a class="btn btn-ghost eleven-open" href="https://play.cartesia.ai/" target="_blank" rel="noopener noreferrer">Open Cartesia Sonic ↗</a><a class="btn btn-ghost eleven-open" href="https://twoshot.app/open-source-tts/" target="_blank" rel="noopener noreferrer">Try TwoShot Qwen3 voice ↗</a><a class="btn btn-ghost eleven-open" href="https://elevenlabs.io/text-to-speech" target="_blank" rel="noopener noreferrer">Open ElevenLabs ↗</a></div><p class="eleven-help">Cartesia has a free monthly allowance of 20,000 text-to-speech credits (around 27 minutes of generated speech). Generate recordings in the Cartesia Playground, download any available audio export, then choose those audio files on the right. Do not put API keys in this website or GitHub repository.</p>
+      <p id="recording-count" class="recording-count" aria-live="polite"></p>
+      <textarea id="recording-script" readonly aria-label="Narration script for Cartesia or TwoShot" rows="8" spellcheck="false"></textarea>
+      <div class="recording-buttons"><button id="recording-copy" type="button" class="btn btn-primary">Copy script</button><button id="recording-save-text" type="button" class="btn btn-outline">Download script</button></div>
+      <div class="recording-provider-links"><a class="btn btn-ghost recording-open" href="https://play.cartesia.ai/" target="_blank" rel="noopener noreferrer">Open Cartesia Sonic ↗</a><a class="btn btn-ghost recording-open" href="https://twoshot.app/open-source-tts/" target="_blank" rel="noopener noreferrer">Try TwoShot Qwen3 voice ↗</a></div><p class="recording-help">Cartesia has a free monthly allowance of 20,000 text-to-speech credits (around 27 minutes of generated speech). Generate recordings in the Cartesia Playground, download any available audio export, then choose those audio files on the right. Do not put API keys in this website or GitHub repository.</p>
     </div>
-    <div class="elevenlabs-panel">
-      <div class="elevenlabs-step"><span>02</span><div><h3>Listen back to back</h3><p>After downloading your MP3 or WAV recordings from any supported voice studio, select them all here. Files play in filename order, then automatically continue.</p></div></div>
-      <label class="eleven-file-label" for="eleven-files">Select MP3 or WAV recordings</label>
-      <input id="eleven-files" type="file" accept="audio/*,.mp3,.m4a,.wav,.ogg" multiple aria-describedby="eleven-upload-help">
-      <p id="eleven-upload-help" class="eleven-help">Name downloads <strong>01.mp3, 02.mp3, 03.mp3</strong> to keep them in order. The audio files you select stay in this browser.</p>
-      <div class="eleven-audio-box">
-        <div id="eleven-current" class="eleven-now" aria-live="polite">No recordings selected yet</div>
-        <audio id="eleven-player" controls preload="none" aria-label="ElevenLabs narration player"></audio>
-        <div class="eleven-controls">
-          <button type="button" id="eleven-prev" class="btn btn-outline btn-small" disabled>← Previous</button>
-          <button type="button" id="eleven-next" class="btn btn-outline btn-small" disabled>Next →</button>
-          <label for="eleven-speed">Speed <select id="eleven-speed"><option value="0.85">0.85×</option><option value="1" selected>1×</option><option value="1.1">1.1×</option><option value="1.25">1.25×</option></select></label>
+    <div class="recording-panel">
+      <div class="recording-step"><span>02</span><div><h3>Listen back to back</h3><p>After downloading your MP3 or WAV recordings from any supported voice studio, select them all here. Files play in filename order, then automatically continue.</p></div></div>
+      <label class="recording-file-label" for="recording-files">Select MP3 or WAV recordings</label>
+      <input id="recording-files" type="file" accept="audio/*,.mp3,.m4a,.wav,.ogg" multiple aria-describedby="recording-upload-help">
+      <p id="recording-upload-help" class="recording-help">Name downloads <strong>01.mp3, 02.mp3, 03.mp3</strong> to keep them in order. The audio files you select stay in this browser.</p>
+      <div class="recording-audio-box">
+        <div id="recording-current" class="recording-now" aria-live="polite">No recordings selected yet</div>
+        <audio id="recording-player" controls preload="none" aria-label="Audio narration player"></audio>
+        <div class="recording-controls">
+          <button type="button" id="recording-prev" class="btn btn-outline btn-small" disabled>← Previous</button>
+          <button type="button" id="recording-next" class="btn btn-outline btn-small" disabled>Next →</button>
+          <label for="recording-speed">Speed <select id="recording-speed"><option value="0.85">0.85×</option><option value="1" selected>1×</option><option value="1.1">1.1×</option><option value="1.25">1.25×</option></select></label>
         </div>
-        <label class="check-row"><input id="eleven-loop" type="checkbox"><span>Repeat the audio playlist</span></label>
+        <label class="check-row"><input id="recording-loop" type="checkbox"><span>Repeat the audio playlist</span></label>
       </div>
-      <ol id="eleven-queue" class="eleven-queue" aria-label="ElevenLabs files queued for playback"></ol>
-      <p class="eleven-help">You can play Cartesia, TwoShot, Voicebox or ElevenLabs audio files here. No website API key is needed. Cartesia, TwoShot and ElevenLabs have usage limits; Voicebox runs locally. Keep this page open while listening.</p>
+      <ol id="recording-queue" class="recording-queue" aria-label="Audio files queued for playback"></ol>
+      <p class="recording-help">Play Cartesia, TwoShot or your own MP3/WAV recordings here. No website API key is needed. Cartesia and TwoShot may have free-tier limits. Keep this page open while listening.</p>
     </div>
   </div>
 </section>
-<p class="disclaimer">For deeper learning, listen with a 6–20 second pause and try to say the answer yourself before the model answer plays. Listening alone is useful for familiarisation, but speaking from memory is the important extra step.</p><div class="footer"><span>CareRecall · A calmer way to prepare for a care assistant interview</span><span>Private to this browser · Built for UK interviews</span></div></main></div><div id="toast" class="toast hidden" role="status" aria-live="polite"></div><script defer src="assets/data.js"></script><script defer src="assets/app.js"></script><script defer src="assets/kokoro.js"></script><script defer src="assets/voicebox-export.js"></script></body></html>
+<p class="disclaimer">For deeper learning, listen with a 6–20 second pause and try to say the answer yourself before the model answer plays. Listening alone is useful for familiarisation, but speaking from memory is the important extra step.</p><div class="footer"><span>CareRecall · A calmer way to prepare for a care assistant interview</span><span>Private to this browser · Built for UK interviews</span></div></main></div><div id="toast" class="toast hidden" role="status" aria-live="polite"></div><script defer src="assets/data.js"></script><script defer src="assets/app.js"></script><script defer src="assets/kokoro.js"></script></body></html>

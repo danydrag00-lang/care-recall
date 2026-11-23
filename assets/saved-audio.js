@@ -25,6 +25,7 @@
   let currentAudio = "";
   let manifest = null;
   let checkedClip = null, checkedReady = null, availabilityCheck = 0;
+  const initialQuestion = Number(new URLSearchParams(window.location?.search || "").get("q"));
 
   const setStatus = message => { status.textContent = message; };
   const filePath = (kind, id) => {
@@ -121,6 +122,8 @@
     if (path !== currentAudio) {
       currentAudio = path;
       audio.src = path;audio.load();
+    } else if (stage !== "idle" && audio.ended) {
+      try { audio.currentTime = 0; } catch (_) {}
     }
     audio.playbackRate = Number(rate.value) || 1;
   }
@@ -129,9 +132,12 @@
     timerClear();
     stage = kind;src(kind);ui();
     setStatus(kind === "question" ? "Playing the question…" : "Playing the saved answer…");
+    const playGeneration = generation;
     const result = audio.play();
     if (result && result.catch) result.catch(error => {
-      if (active && !paused) setStatus("Audio could not start. Press Play again, or retry after the recordings are published.");
+      if (playGeneration !== generation || !active || paused) return;
+      stopped(false);
+      setStatus("The recording could not start. Please check your connection or choose an available voice. Press Play to retry.");
     });
   }
   function startQuestion() {startSound("question");}
@@ -210,9 +216,11 @@
   function populateJumpList() {
     const search = jumpSearch.value.trim().toLocaleLowerCase("en-GB");
     const oldId = jumpSelect.value;
+    const numberedSearch = search.match(/^(?:question\s*|q\s*)?#?\s*0*(\d+)$/i);
+    const wantedId = numberedSearch ? Number(numberedSearch[1]) : null;
     const matching = all.filter(q =>
       !search ||
-      String(q.id) === search.replace(/^q(?:uestion)?\s*#?/i, "").trim() ||
+      (wantedId !== null && q.id === wantedId) ||
       q.question.toLocaleLowerCase("en-GB").includes(search) ||
       (q.category || "").toLocaleLowerCase("en-GB").includes(search)
     );
@@ -351,16 +359,27 @@
       }
       manifest = payload;
       available = true;
-      const chosen = VOICES[voice.value] || "Emma";
-      setStatus("Ready · " + chosen + " · " + all.length + " saved questions and answers. Press Play." + (answerMode === "full" && !payload.answer_styles?.includes("full") ? " Full-answer audio is still being prepared." : ""));
+      void checkCurrentAudio();
+      setStatus("The audio library includes " + all.length + " questions. Checking the selected recording…");
     } catch (err) {
       // The manifest is optional: a working MP3 must never be blocked by a failed check.
-      setStatus("Press Play to listen. If a recording is missing, choose Emma or use Check recordings again.");
+      void checkCurrentAudio();
+      setStatus("Could not read the audio index. Checking the selected MP3 directly…");
     } finally {
       reload.disabled = false;
       ui();
     }
   }
   reload.addEventListener("click",checkSavedAudio);
-  changeTopic();populateJumpList();checkSavedAudio();
+  changeTopic();
+  if (Number.isInteger(initialQuestion) && all.some(q => q.id === initialQuestion)) {
+    topic.value = "all";
+    items = all.slice();
+    index = items.findIndex(q => q.id === initialQuestion);
+    render();
+    src("question");
+    setStatus("Selected Q" + initialQuestion + " from the question library. Press Play to listen.");
+  }
+  populateJumpList();
+  checkSavedAudio();
 })();

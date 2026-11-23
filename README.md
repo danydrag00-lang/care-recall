@@ -7,7 +7,7 @@ A responsive, no-subscription website that helps you recall **72 care assistant 
 - **Dashboard:** progress, confidence, reviews due, seven-day activity and a suggested study method.
 - **Recall Practice:** unexpected questions, answer before revealing, short natural answers, 3 recall cues, original answers, self-rating and scheduled follow-up practice.
 - **Mock Interview:** mixed topics, 60-second countdown and optional speech dictation of your own response.
-- **Listen & Learn:** one-click playback of 72 saved British English question-and-answer recordings, with both answer versions shown on screen. Repeat each question until you press Next or switch to automatic advance. Choose topics, playback speed and thinking pause.
+- **Listen & Learn:** clickable Short answer / My uploaded answer choices, with matching prerecorded British English audio. Repeat until Next or advance automatically. Choose a voice, topic, speed and thinking pause.
 - **Question Library:** search all 72 questions and browse nine families of questions that share similar answer approaches.
 - **Private progress:** no CareRecall login, database, ads or API keys. Review history stays in your browser's local storage. Export and import a JSON backup. The stored audio files are served as ordinary static site assets.
 - **Installable/offline:** when served over HTTPS, the service worker caches the website's static files. Saved audio plays over the internet; previously loaded MP3 recordings may remain in browser cache but offline audio is not guaranteed.
@@ -55,17 +55,20 @@ This combines *retrieval practice* (remembering before viewing), *spaced practic
 - Carpenter et al., *The science of effective learning with spacing and retrieval practice* (Nature Reviews Psychology, 2022): https://www.nature.com/articles/s44159-022-00089-1
 - The Learning Scientists, spaced and retrieval practice FAQ: https://www.learningscientists.org/faq
 
-## Listen & Learn: saved British English answers
+## Listen & Learn: choose which answer to read and hear
 
-The **Listen & Learn** page displays each interview question, its short spoken answer, and the original full answer on the same screen. The answers are never hidden behind an audio player.
+Every question now includes two clickable answer choices directly above the answer text:
 
-Press **Play** to hear the question, followed by a configurable thinking pause, followed by the short answer. The page plays **pre-generated MP3 recordings** using the free Kokoro English voice `bf_emma`. Audio is not generated in the browser, and no API key, payment account, or external voice studio is required to play it.
+- **Short answer** displays the concise interview-ready version from `q.short`.
+- **My uploaded answer** displays the complete original answer from `q.full`, as supplied by the learner. This is not rewritten or shortened.
 
-**Repeat this question** is enabled by default. When enabled, the same question-and-answer audio repeats until the learner presses **Next question**. Turn it off to advance automatically after each answer. The optional **Repeat the full list** control loops back to the first question after the final one.
+Selecting an option immediately updates the displayed answer. Press **Play question & answer** or **Play answer only** to hear that same selected version in the chosen Kokoro British English voice. The audio is pre-generated and saved as ordinary static MP3 recordings, so website visitors do not have to generate speech or use an API key.
 
-If the audio is not ready, the page displays an explanatory message and a **Check recordings** button. The recordings are built from the question bank by the GitHub Actions workflow at `.github/workflows/build-kokoro-audio.yml`. The workflow produces 144 small MP3 files (72 question recordings and 72 answer recordings) in `audio/`, plus `audio/manifest.json`. Once these are published, pressing Play works immediately without loading an AI model.
+**Repeat this question** is enabled by default. This repeats the question and whichever answer type is selected until the learner presses **Next question**. Disable it to advance automatically after each answer.
 
-Audio plays the concise answer (`q.short`), which is shown in full on screen. The original full answer (`q.full`) is available in the expanded section beneath it. Changing the full answer will not affect saved audio until the workflow is run again and the voice files are regenerated.
+Audio files use `audio/questions/001.mp3` for the Emma question, `audio/answers/001.mp3` for Emma's short answer, and `audio/answers-full/001.mp3` for Emma's complete original answer. Isabella and George use analogous paths under `audio/voices/<voice_id>/`. All three voice versions are created by `tools/generate_kokoro_audio.py` and saved by `.github/workflows/build-kokoro-audio.yml`. The build uses manageable segments for long original answers to avoid truncating their text. New answer audio becomes available once the GitHub Action finishes and GitHub Pages publishes the files; the selected answer text is available immediately regardless of the audio build status.
+
+**Privacy:** The website repository is public, and `assets/data.js` already includes the original answers. Saved recordings of those answers will also be publicly accessible. Do not use personal or confidential details you would not want to publish.
 
 The **Dictate** button on the practice page remains a separate speech-to-text feature; it can use online recognition depending on browser. Do not dictate residents' private or medical information.
 

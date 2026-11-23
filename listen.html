@@ -30,11 +30,12 @@
       <progress id="saved-progress" max="1" value="0" aria-label="Questions completed"></progress>
       <div class="saved-transport">
         <button id="saved-prev" type="button" class="btn btn-outline" disabled>← Previous</button>
-        <button id="saved-play" type="button" class="btn btn-primary">▶ Play</button>
+        <button id="saved-play" type="button" class="btn btn-primary">▶ Play question &amp; answer</button>
+        <button id="saved-play-answer" type="button" class="btn btn-outline">▶ Play answer only</button>
         <button id="saved-stop" type="button" class="btn btn-outline" disabled>Stop</button>
         <button id="saved-next" type="button" class="btn btn-primary">Next question →</button>
       </div>
-      <audio id="saved-audio" controls preload="none" aria-label="Saved question and answer recordings"></audio>
+      <audio id="saved-audio" controls preload="metadata" src="audio/answers/001.mp3" aria-label="Saved question and answer recordings"></audio>
       <p class="saved-status" id="saved-status" role="status" aria-live="polite">Ready. Press Play to hear your question and answer.</p>
     </div>
 

@@ -1,40 +1,32 @@
 {
-  "version": 3,
+  "version": 1,
   "voice": "bf_emma",
   "voices": [
     {
       "id": "bf_emma",
-      "base": "audio",
       "name": "Emma",
       "accent": "British female",
-      "answer_styles": [
-        "short",
-        "full"
-      ]
+      "base": "audio"
     },
     {
       "id": "bf_isabella",
-      "base": "audio/voices/bf_isabella",
       "name": "Isabella",
       "accent": "British female",
-      "answer_styles": [
-        "short",
-        "full"
-      ]
+      "base": "audio/voices/bf_isabella"
     },
     {
       "id": "bm_george",
-      "base": "audio/voices/bm_george",
       "name": "George",
       "accent": "British male",
-      "answer_styles": [
-        "short",
-        "full"
-      ]
+      "base": "audio/voices/bm_george"
     }
   ],
   "model": "Kokoro-82M-v1.0",
   "answer_style": "short_and_full",
+  "answer_styles": [
+    "short",
+    "full"
+  ],
   "question_count": 72,
   "bank_sha256": "3b08ac861886598761130cf1dcc83d44562f13ceec3f120738e3e8d05ca726cb",
   "files": [
@@ -470,9 +462,5 @@
       "answer": "audio/answers/072.mp3",
       "answer_full": "audio/answers-full/072.mp3"
     }
-  ],
-  "answer_styles": [
-    "short",
-    "full"
   ]
 }

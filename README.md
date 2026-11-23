@@ -59,6 +59,9 @@ This combines *retrieval practice* (remembering before viewing), *spaced practic
 
 On **Listen & Learn**, scroll to **Play Cartesia or TwoShot recordings**.
 
+**Preferred Cartesia voice:** Julia — Gentle Guide (British English), voice ID `273f9ef7-9fc2-4def-88bb-ab108c6249ca`. Click **Copy voice ID** on the listening page if you need it for the Cartesia API; in the Playground, look for the voice by its name. A voice ID is not an API key. CareRecall's GitHub Pages deployment does not call Cartesia's API directly; generation requires the external Cartesia Playground or a separate, securely configured backend.
+
+
 1. Choose a batch of four questions, with short or full answers.
 2. Click **Copy script** or **Download script**. Paste it into [Cartesia](https://play.cartesia.ai/) or [TwoShot](https://twoshot.app/open-source-tts/).
 3. Generate and download an MP3 or WAV recording if the chosen service offers an audio export, subject to its usage limits.

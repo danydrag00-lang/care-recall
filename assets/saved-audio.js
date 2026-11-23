@@ -13,18 +13,24 @@
   const count = $("saved-position"), stageLabel = $("saved-stage"), progress = $("saved-progress");
   const topic = $("saved-topic"), rate = $("saved-rate"), think = $("saved-think");
   const repeat = $("saved-repeat"), playlistLoop = $("saved-loop"), reload = $("saved-reload");
+  const voice = $("saved-voice"), voiceLabel = $("saved-voice-label");
+  const VOICES = { bf_emma: "Emma", bf_isabella: "Isabella", bm_george: "George" };
   const all = window.CARE_DATA?.questions ?? [];
-  let items = [], index = 0, available = false, active = false, paused = false;
+  let items = [], index = 0, available = true, active = false, paused = false;
   let stage = "idle", gapTimer = null, gapStart = 0, gapRemaining = 0, gapTarget = null, generation = 0;
   let currentAudio = "";
   let manifest = null;
 
   const setStatus = message => { status.textContent = message; };
-  const filePath = (kind, id) => "audio/" + (kind === "question" ? "questions/" : "answers/") + String(id).padStart(3,"0") + ".mp3";
+  const filePath = (kind, id) => {
+    const selected = Object.hasOwn(VOICES, voice.value) ? voice.value : "bf_emma";
+    const root = selected === "bf_emma" ? "audio/" : "audio/voices/" + selected + "/";
+    return root + (kind === "question" ? "questions/" : "answers/") + String(id).padStart(3,"0") + ".mp3";
+  };
   const answerText = q => q.short ?? "";
   function timerClear() { if (gapTimer !== null) clearTimeout(gapTimer); gapTimer = null;gapTarget = null; gapRemaining = 0; }
   function ui() {
-    play.disabled = !available || !items.length;
+    play.disabled = !items.length;
     stop.disabled = !active;
     next.disabled = !items.length;
     prev.disabled = index <= 0;
@@ -137,21 +143,21 @@
       }
     }
     stopped();index = n;render();
-    if (autoplay && available) {active = true;paused = false;startQuestion();}
+    if (autoplay) {active = true;paused = false;startQuestion();}
     else {src("question");setStatus("Ready. Press Play to hear this question and answer.");}
   }
   function changeTopic() {
     stopped();
     items = all.filter(q => topic.value === "all" || q.category === topic.value);
     index = 0;render();
-    if (available && items.length) src("question");
-    setStatus(available ? "Ready. Press Play to hear each question and its answer." : "Checking for saved recordings…");
+    if (items.length) src("question");
+    setStatus("Ready. Press Play to hear each question and its answer.");
   }
   for(const cat of [...new Set(all.map(q => q.category).filter(Boolean))]) {
     const opt=document.createElement("option");opt.value=cat;opt.textContent=cat;topic.appendChild(opt);
   }
   play.addEventListener("click",() => {
-    if (!available || !items.length) {setStatus("Saved recordings are not available yet. Press Check recordings.");return;}
+    if (!items.length) {setStatus("Choose a topic containing questions.");return;}
     if (active) {if (paused) resumeIt();else pauseIt();return;}
     active = true;paused = false;startQuestion();
   });
@@ -159,29 +165,40 @@
   next.addEventListener("click",() => move(1,true));
   prev.addEventListener("click",() => move(-1,true));
   topic.addEventListener("change",changeTopic);
+  voice.addEventListener("change", () => {
+    stopped();
+    if (voiceLabel) voiceLabel.textContent = (VOICES[voice.value] || "Emma") + " · Kokoro";
+    if (items.length) src("question");
+    setStatus("Selected " + (VOICES[voice.value] || "Emma") + ". Press Play to hear the saved question and answer.");
+  });
   rate.addEventListener("change",() => {audio.playbackRate=Number(rate.value)||1;});
   playlistLoop.addEventListener("change",ui);
   audio.addEventListener("ended",onEnd);
   audio.addEventListener("error",() => {
-    if (active) {stopped();setStatus("This recording is missing or could not play. The saved MP3 generation may still be running.");}
+    if (active) {stopped();setStatus("This recording is not yet available. If you selected Isabella or George, choose Emma or check again once the new recordings are published.");}
   });
   window.addEventListener("pagehide",() => stopped());
   async function checkSavedAudio() {
-    available = false;stopped();ui();reload.disabled = true;
-    setStatus("Checking for the 72 saved question-and-answer recordings…");
+    reload.disabled = true;
+    setStatus("Checking the saved audio library…");
     try {
-      const response = await fetch("audio/manifest.json?check=" + Date.now(), {cache:"no-store"});
-      if (!response.ok) throw new Error("Audio build has not published the manifest yet");
+      const response = await fetch("audio/manifest.json?check=" + Date.now(), { cache: "no-store" });
+      if (!response.ok) throw new Error("Manifest was not accessible");
       const payload = await response.json();
-      if (payload.question_count !== all.length || !Array.isArray(payload.files) || payload.files.length !== all.length)
-        throw new Error("The recordings are not yet complete");
-      const ids = new Set(payload.files.map(f => Number(f.id)));
-      if (all.some(q => !ids.has(Number(q.id)))) throw new Error("Some questions are missing from the audio manifest");
-      manifest = payload;available = true;render();src("question");
-      setStatus("Ready · British English voice · " + all.length + " saved questions and answers. Press Play.");
+      if (payload.question_count !== all.length || !Array.isArray(payload.files) || payload.files.length !== all.length) {
+        throw new Error("Unexpected manifest format");
+      }
+      manifest = payload;
+      available = true;
+      const chosen = VOICES[voice.value] || "Emma";
+      setStatus("Ready · " + chosen + " · " + all.length + " saved questions and answers. Press Play.");
     } catch (err) {
-      setStatus("Saved Kokoro recordings are still being prepared. Use Check recordings after GitHub finishes generating them.");
-    } finally {reload.disabled = false;ui();}
+      // The manifest is optional: a working MP3 must never be blocked by a failed check.
+      setStatus("Press Play to listen. If a recording is missing, choose Emma or use Check recordings again.");
+    } finally {
+      reload.disabled = false;
+      ui();
+    }
   }
   reload.addEventListener("click",checkSavedAudio);
   changeTopic();checkSavedAudio();

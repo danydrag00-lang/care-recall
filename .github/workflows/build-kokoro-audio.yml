@@ -9,8 +9,6 @@ on:
   workflow_dispatch:
 permissions:
   contents: write
-  pages: write
-  id-token: write
 concurrency:
   group: care-recall-kokoro
   cancel-in-progress: false
@@ -18,8 +16,6 @@ jobs:
   build:
     runs-on: ubuntu-latest
     timeout-minutes: 110
-    environment:
-      name: github-pages
     steps:
       - name: Check out CareRecall
         uses: actions/checkout@v4
@@ -43,25 +39,16 @@ jobs:
           ls -lh model-cache
       - name: Generate 72 questions and answers
         run: python tools/generate_kokoro_audio.py
-      - name: Commit saved MP3 recordings
+      - name: Commit saved recordings on latest main
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add audio/
           if ! git diff --cached --quiet; then
             git commit -m 'Add pre-generated Kokoro narration for 72 interview Q&A'
+            git fetch origin main
+            git rebase origin/main
             git push origin HEAD:main
+          else
+            echo 'All 144 saved MP3s already exist in the repository.'
           fi
-      - name: Prepare website
-        run: |
-          mkdir -p _site
-          rsync -a --exclude='.git' --exclude='.github' --exclude='model-cache' --exclude='_site' --exclude='tools' --exclude='README.md' --exclude='START-HERE.txt' ./ _site/
-      - name: Configure Pages
-        uses: actions/configure-pages@v5
-      - name: Upload static site
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: _site
-      - name: Deploy Pages
-        id: deployment
-        uses: actions/deploy-pages@v4

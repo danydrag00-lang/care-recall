@@ -21,6 +21,7 @@
   const all = window.CARE_DATA?.questions ?? [];
   let items = [], index = 0, available = true, active = false, paused = false;
   let answerMode = "short";
+  let answerOnlyMode = false;
   let stage = "idle", gapTimer = null, gapStart = 0, gapRemaining = 0, gapTarget = null, generation = 0;
   let currentAudio = "";
   let manifest = null;
@@ -173,7 +174,7 @@
       if (repeat.checked) {
         setStatus("Repeating this question and answer. Press Next to move on.");
         stage = "thinking";ui();
-        setGap(700, startQuestion);
+        setGap(700, answerOnlyMode ? startAnswer : startQuestion);
       } else {
         stage = "thinking";ui();
         setGap(650, () => move(1, true));
@@ -211,7 +212,7 @@
       }
     }
     stopped();index = n;render();
-    if (autoplay) {active = true;paused = false;startQuestion();}
+    if (autoplay) {active = true;paused = false;if (answerOnlyMode) startAnswer(); else startQuestion();}
     else {src("question");setStatus("Ready. Press Play to hear this question and answer.");}
   }
   function changeTopic() {
@@ -264,6 +265,7 @@
       return;
     }
     stopped();
+    answerOnlyMode = false;
     // A direct jump always works, even when a different topic filter is active.
     if (topic.value !== "all" && topic.value !== selected.category) {
       topic.value = "all";
@@ -303,21 +305,23 @@
     if (!items.length) {setStatus("Choose a topic containing questions.");return;}
     if (!active && checkedReady === false) { setStatus("The selected recording is not published yet. Choose Emma with Short answer to listen now."); return; }
     if (active) {if (paused) resumeIt();else pauseIt();return;}
+    answerOnlyMode = false;
     active = true;paused = false;startQuestion();
   });
   playAnswer.addEventListener("click", () => {
     if (!items.length) return;
     if (checkedReady === false) { setStatus("The selected recording is not published yet. Choose Emma with Short answer to listen now."); return; }
-    stopped(); active = true; paused = false;
+    stopped(); answerOnlyMode = true; active = true; paused = false;
     startAnswer();
   });
-  stop.addEventListener("click",() => {stopped();render();if(available)src("question");setStatus("Stopped. Press Play to begin again.");});
+  stop.addEventListener("click",() => {stopped();answerOnlyMode = false;render();if(available)src("question");setStatus("Stopped. Press Play to begin again.");});
   next.addEventListener("click",() => move(1,true));
   prev.addEventListener("click",() => move(-1,true));
   function selectAnswer(nextMode) {
     if (nextMode !== "short" && nextMode !== "full") return;
     if (nextMode === answerMode) return;
     stopped();
+    answerOnlyMode = false;
     answerMode = nextMode;
     render();
     if (items.length) src("answer");
@@ -336,6 +340,7 @@
   });
   fallback.addEventListener("click", () => {
     stopped();
+    answerOnlyMode = true;
     voice.value = "bf_emma";
     if(voiceLabel) voiceLabel.textContent = "Emma · Kokoro";
     answerMode = "short";

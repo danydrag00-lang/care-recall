@@ -37,26 +37,26 @@
 <section class="surface elevenlabs-section" aria-labelledby="elevenlabs-title">
   <div class="elevenlabs-intro">
     <span class="eyebrow">VOICE STUDIO · OPTIONAL</span>
-    <h2 id="elevenlabs-title">Play your ElevenLabs or Voicebox recordings</h2>
-    <p>Generate recordings with ElevenLabs or Voicebox, then play them back to back here. The regular device voice remains available for free.</p>
+    <h2 id="elevenlabs-title">Play TwoShot, ElevenLabs or Voicebox recordings</h2>
+    <p>Generate recordings with TwoShot, ElevenLabs or Voicebox, then play them back to back here. The regular device voice remains available for free.</p>
   </div>
   <div class="elevenlabs-grid">
     <div class="elevenlabs-panel">
-      <div class="elevenlabs-step"><span>01</span><div><h3>Prepare your narration</h3><p>Copy a ready-to-read script. Each batch contains four questions with natural speaking pauses.</p></div></div>
+      <div class="elevenlabs-step"><span>01</span><div><h3>Prepare your narration</h3><p>Copy a ready-to-read script for TwoShot or ElevenLabs. Each batch contains four questions, helping you stay within free-tier limits.</p></div></div>
       <div class="elevenlabs-fields">
         <div class="field"><label for="eleven-batch">Question batch</label><select id="eleven-batch"></select></div>
         <div class="field"><label for="eleven-version">Answer style</label><select id="eleven-version"><option value="short">Short answers (recommended)</option><option value="full">Full answers</option></select></div>
       </div>
       <p id="eleven-count" class="eleven-count" aria-live="polite"></p>
-      <textarea id="eleven-script" readonly aria-label="Narration script to copy into ElevenLabs" rows="8" spellcheck="false"></textarea>
+      <textarea id="eleven-script" readonly aria-label="Narration script for TwoShot or ElevenLabs" rows="8" spellcheck="false"></textarea>
       <div class="eleven-buttons"><button id="eleven-copy" type="button" class="btn btn-primary">Copy script</button><button id="eleven-save-text" type="button" class="btn btn-outline">Download script</button></div>
-      <a class="btn btn-ghost eleven-open" href="https://elevenlabs.io/text-to-speech" target="_blank" rel="noopener noreferrer">Open ElevenLabs text-to-speech ↗</a>
+      <div class="voicebox-actions"><a class="btn btn-ghost eleven-open" href="https://twoshot.app/open-source-tts/" target="_blank" rel="noopener noreferrer">Try TwoShot Qwen3 voice ↗</a><a class="btn btn-ghost eleven-open" href="https://elevenlabs.io/text-to-speech" target="_blank" rel="noopener noreferrer">Open ElevenLabs ↗</a></div>
     </div>
     <div class="elevenlabs-panel">
-      <div class="elevenlabs-step"><span>02</span><div><h3>Listen back to back</h3><p>After downloading your MP3 or WAV recordings, select them all here. Files play in filename order, then automatically continue.</p></div></div>
+      <div class="elevenlabs-step"><span>02</span><div><h3>Listen back to back</h3><p>After downloading your MP3 or WAV recordings from any supported voice studio, select them all here. Files play in filename order, then automatically continue.</p></div></div>
       <label class="eleven-file-label" for="eleven-files">Select MP3 or WAV recordings</label>
       <input id="eleven-files" type="file" accept="audio/*,.mp3,.m4a,.wav,.ogg" multiple aria-describedby="eleven-upload-help">
-      <p id="eleven-upload-help" class="eleven-help">Name downloads <strong>01.mp3, 02.mp3, 03.mp3</strong> and so on to keep them in the correct order. Files stay on your device.</p>
+      <p id="eleven-upload-help" class="eleven-help">Name downloads <strong>01.mp3, 02.mp3, 03.mp3</strong> to keep them in order. The audio files you select stay in this browser.</p>
       <div class="eleven-audio-box">
         <div id="eleven-current" class="eleven-now" aria-live="polite">No recordings selected yet</div>
         <audio id="eleven-player" controls preload="none" aria-label="ElevenLabs narration player"></audio>
@@ -68,7 +68,7 @@
         <label class="check-row"><input id="eleven-loop" type="checkbox"><span>Repeat the audio playlist</span></label>
       </div>
       <ol id="eleven-queue" class="eleven-queue" aria-label="ElevenLabs files queued for playback"></ol>
-      <p class="eleven-help">You can use either Voicebox or ElevenLabs audio files. No website API key is needed. ElevenLabs has free-tier generation limits. Keep the page open while listening.</p>
+      <p class="eleven-help">You can use TwoShot, Voicebox or ElevenLabs audio files. No website API key is needed. TwoShot and ElevenLabs have free-tier limits; Voicebox runs locally. Keep the page open while listening.</p>
     </div>
   </div>
 </section>

@@ -44,3 +44,16 @@ jobs:
           node --check sw.js
       - name: Test listening player and question navigation
         run: node --test tests/site.test.js
+      - name: Check live GitHub Pages and saved MP3 streaming
+        run: |
+          set -e
+          ROOT='https://danydrag00-lang.github.io/care-recall'
+          for file in listen.html assets/data.js assets/saved-audio.js audio/manifest.json audio/questions/001.mp3 audio/answers/001.mp3; do
+            url="$ROOT/$file"
+            status=$(curl --retry 4 --retry-delay 3 -sSL -o /dev/null -w '%{http_code}' --max-time 30 "$url")
+            echo "$file => HTTP $status"
+            if [ "$status" != '200' ] && [ "$status" != '206' ]; then
+              echo "Error: live GitHub Pages asset is missing: $url" >&2
+              exit 1
+            fi
+          done

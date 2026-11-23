@@ -360,6 +360,10 @@
     }
   });
   window.addEventListener("pagehide",() => stopped());
+  // Recheck missing audio when the learner returns to the tab after publication.
+  window.addEventListener("focus", () => {
+    if (items.length && checkedReady !== true) void checkCurrentAudio();
+  });
   async function checkSavedAudio() {
     reload.disabled = true;
     setStatus("Checking the saved audio library…");

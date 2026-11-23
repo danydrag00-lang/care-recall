@@ -1,6 +1,6 @@
-/* CareRecall v16 — refreshed Study Room styling with direct MP3 streaming. */
-const CACHE='care-recall-v16';
-const ASSETS=['./','./index.html','./practice.html','./listen.html','./library.html','./assets/style.css','./assets/data.js','./assets/app.js','./assets/saved-audio.js','./assets/favicon.svg','./manifest.webmanifest'];
+/* CareRecall v17 — editorial theme and edited Kokoro narration. */
+const CACHE='care-recall-v17';
+const ASSETS=['./','./index.html','./practice.html','./listen.html','./library.html','./assets/style.css','./assets/editorial.css','./assets/data.js','./assets/answer-edits.js','./assets/edited-voice.js','./assets/app.js','./assets/saved-audio.js','./assets/favicon.svg','./manifest.webmanifest'];
 self.addEventListener('install',e=>{
   e.waitUntil(caches.open(CACHE).then(c=>c.addAll(ASSETS)));
   self.skipWaiting();

@@ -34,19 +34,6 @@
         <h2 id="saved-question">Tell me about yourself.</h2>
       </div>
 
-      <div class="saved-answer-box">
-        <div class="study-answer-top">
-          <div class="saved-answer-heading"><span class="saved-answer-icon" aria-hidden="true">✓</span><span id="saved-answer-kind">SHORT ANSWER</span></div>
-          <div class="saved-answer-switch" role="group" aria-label="Choose which answer to study">
-            <button type="button" id="saved-answer-short" class="saved-answer-choice is-active" aria-pressed="true">Short</button>
-            <button type="button" id="saved-answer-full" class="saved-answer-choice" aria-pressed="false">My full answer</button>
-          </div>
-        </div>
-        <p id="saved-answer">Your chosen answer appears here.</p>
-        <div class="saved-availability" id="saved-availability" role="status" aria-live="polite">Checking your saved audio…</div>
-        <button type="button" id="saved-use-available" class="btn btn-outline saved-available-button" hidden>▶ Use Emma · short answer instead</button>
-      </div>
-
       <div class="study-player">
         <div class="saved-transport">
           <button id="saved-prev" type="button" class="btn study-nav-btn" disabled aria-label="Previous question" title="Previous question"><span aria-hidden="true">←</span><span class="study-nav-label">Back</span></button>
@@ -63,6 +50,19 @@
         <audio id="saved-audio" preload="none" aria-label="Saved question and answer audio"></audio>
         <p class="saved-status" id="saved-status" role="status" aria-live="polite">Ready to practise. Press Play.</p>
       </div>
+      <div class="saved-answer-box">
+        <div class="study-answer-top">
+          <div class="saved-answer-heading"><span class="saved-answer-icon" aria-hidden="true">✓</span><span id="saved-answer-kind">SHORT ANSWER</span></div>
+          <div class="saved-answer-switch" role="group" aria-label="Choose which answer to study">
+            <button type="button" id="saved-answer-short" class="saved-answer-choice is-active" aria-pressed="true">Short</button>
+            <button type="button" id="saved-answer-full" class="saved-answer-choice" aria-pressed="false">My full answer</button>
+          </div>
+        </div>
+        <p id="saved-answer">Your chosen answer appears here.</p>
+        <div class="saved-availability" id="saved-availability" role="status" aria-live="polite">Checking your saved audio…</div>
+        <button type="button" id="saved-use-available" class="btn btn-outline saved-available-button" hidden>▶ Use Emma · short answer instead</button>
+      </div>
+
     </div>
 
     <details class="study-settings" id="study-settings">

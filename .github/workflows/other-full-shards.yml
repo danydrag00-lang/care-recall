@@ -1,0 +1,72 @@
+name: Publish Isabella and George full uploaded answers
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/other-full-shards.yml'
+      - 'tools/generate_other_full_shard.py'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  full-voice-batches:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      max-parallel: 8
+      matrix:
+        voice: [bf_isabella, bm_george]
+        shard: [0, 1, 2, 3]
+    env:
+      VOICE: ${{ matrix.voice }}
+      SHARD: ${{ matrix.shard }}
+    steps:
+      - name: Check out CareRecall
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install neural voice prerequisites
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -qq -y espeak-ng ffmpeg libsndfile1
+          python -m pip install -q kokoro-onnx soundfile
+      - name: Download Kokoro speech model
+        run: |
+          mkdir -p model-cache
+          curl -fL --retry 4 --retry-delay 5 'https://github.com/thewh1teagle/kokoro-onnx/releases/download/model-files-v1.1/kokoro-v1.0.onnx' -o model-cache/kokoro-v1.0.onnx
+          curl -fL --retry 4 --retry-delay 5 'https://github.com/thewh1teagle/kokoro-onnx/releases/download/model-files-v1.1/voices-v1.0.bin' -o model-cache/voices-v1.0.bin
+      - name: Generate complete answers
+        run: python tools/generate_other_full_shard.py --voice "$VOICE" --shard "$SHARD" --shards 4
+      - name: Save generated MP3s to GitHub
+        run: |
+          mkdir -p /tmp/full-recordings
+          cp -a "audio/voices/$VOICE/answers-full/." /tmp/full-recordings/
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          for attempt in 1 2 3 4 5 6 7 8 9 10 11 12; do
+            git fetch origin main
+            git reset --hard origin/main
+            mkdir -p "audio/voices/$VOICE/answers-full"
+            cp -an /tmp/full-recordings/. "audio/voices/$VOICE/answers-full/"
+            git add "audio/voices/$VOICE/answers-full/"
+            if git diff --cached --quiet; then
+              echo 'These recordings are already published.'
+              break
+            fi
+            git commit -m "Publish full answers for $VOICE, batch $SHARD"
+            if git push origin HEAD:main; then
+              echo "Published $VOICE batch $SHARD"
+              break
+            fi
+            if [ "$attempt" -eq 12 ]; then
+              echo 'Unable to publish recordings after multiple attempts.' >&2
+              exit 1
+            fi
+            sleep $((attempt * 2 + SHARD))
+          done

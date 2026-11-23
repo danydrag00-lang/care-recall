@@ -36,7 +36,7 @@ function harness(options = {}) {
         appendChild(child) {
           this.children.push(child);
           this.options.push(child);
-          if (this.options.length === 1) this.value = child.value;
+          if (this.options.length === 1 && !this.value) this.value = child.value;
         },
         replaceChildren() { this.children = []; this.options = []; this.value = ""; },
         pause() { this.playing = false; },
@@ -102,7 +102,8 @@ function harness(options = {}) {
   vm.runInNewContext(code, context, {filename: "assets/saved-audio.js", timeout: 1000});
 
   async function flush() {
-    for (let i = 0; i < 6; i++) await Promise.resolve();
+    for (let i = 0; i < 12; i++) await Promise.resolve();
+    await new Promise(resolve => setImmediate(resolve));
   }
   function click(id) {
     const fn = get(id).listeners.click;

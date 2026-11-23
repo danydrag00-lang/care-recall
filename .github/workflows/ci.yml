@@ -5,6 +5,7 @@ on:
     branches: [main]
     paths:
       - 'assets/*.js'
+      - 'assets/*.css'
       - 'listen.html'
       - 'practice.html'
       - 'library.html'
@@ -40,6 +41,8 @@ jobs:
         run: |
           node --check assets/app.js
           node --check assets/saved-audio.js
+          node --check assets/answer-edits.js
+          node --check assets/edited-voice.js
           node --check assets/data.js
           node --check sw.js
       - name: Test listening player and question navigation
@@ -48,7 +51,7 @@ jobs:
         run: |
           set -e
           ROOT='https://danydrag00-lang.github.io/care-recall'
-          for file in listen.html assets/data.js assets/saved-audio.js audio/manifest.json audio/questions/001.mp3 audio/answers/001.mp3; do
+          for file in listen.html assets/data.js assets/answer-edits.js assets/edited-voice.js assets/style.css assets/editorial.css assets/saved-audio.js audio/manifest.json audio/questions/001.mp3 audio/answers/001.mp3; do
             url="$ROOT/$file"
             status=$(curl --retry 4 --retry-delay 3 -sSL -o /dev/null -w '%{http_code}' --max-time 30 "$url")
             echo "$file => HTTP $status"

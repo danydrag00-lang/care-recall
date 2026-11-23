@@ -7,7 +7,7 @@ A responsive, no-subscription website that helps you recall **72 care assistant 
 - **Dashboard:** progress, confidence, reviews due, seven-day activity and a suggested study method.
 - **Recall Practice:** unexpected questions, answer before revealing, short natural answers, 3 recall cues, original answers, self-rating and scheduled follow-up practice.
 - **Mock Interview:** mixed topics, 60-second countdown and optional speech dictation of your own response.
-- **Listen & Learn:** clickable Short answer / My uploaded answer choices, with matching prerecorded British English audio. Repeat until Next or advance automatically. Choose a voice, topic, speed and thinking pause.
+- **Study Room:** edit Short or My full answer and save the revision privately; the site automatically regenerates narrated speech for the new wording with browser-based Kokoro. Unchanged answers use the pre-recorded MP3s. Repeat until Next, jump to a question, or use Focus mode.
 - **Question Library:** search all 72 questions and browse nine families of questions that share similar answer approaches.
 - **Private progress:** no CareRecall login, database, ads or API keys. Review history stays in your browser's local storage. Export and import a JSON backup. The stored audio files are served as ordinary static site assets.
 - **Installable/offline:** when served over HTTPS, the service worker caches the website's static files. Saved audio plays over the internet; previously loaded MP3 recordings may remain in browser cache but offline audio is not guaranteed.
@@ -54,6 +54,18 @@ This combines *retrieval practice* (remembering before viewing), *spaced practic
 - Dunlosky et al., *Improving Students' Learning With Effective Learning Techniques* (2013): https://doi.org/10.1177/1529100612453266
 - Carpenter et al., *The science of effective learning with spacing and retrieval practice* (Nature Reviews Psychology, 2022): https://www.nature.com/articles/s44159-022-00089-1
 - The Learning Scientists, spaced and retrieval practice FAQ: https://www.learningscientists.org/faq
+
+## Personal answer edits and updated playback
+
+From **Study Room**, select **Short** or **My full answer**, then choose **Edit answer**. Save the rewritten answer with **Save & update voice**. The chosen text updates immediately in the Study Room, Question Library and Recall Practice. Edits are kept in the browser's `localStorage`, not saved in the public GitHub source and not synced across devices or browsers. **Restore original** removes only the selected question/version override and uses its existing pre-recorded MP3 again.
+
+For a saved personal revision, CareRecall automatically starts Kokoro browser narration using the selected Emma, Isabella or George voice. This never deliberately plays the old MP3 against your revised text. Kokoro's first use needs to download an AI model and run local speech generation, which can be demanding on older devices. The newly generated WAV file is cached in the browser's IndexedDB so later playback can reuse it. The web app shows generation progress; if the model is unavailable, the text remains saved and the player explains that the updated narration could not be prepared. You can retry without making a new edit. No voice key, paid API account or built-in device voice is needed.
+
+**Privacy:** edited answers are stored on this device. The existing original answers and their MP3s are in the public GitHub repository. Kokoro's code/model are downloaded from external public hosts when you first edit an answer, but the text-to-speech computation runs in the visitor's browser rather than submitting revised text to CareRecall's server. Avoid putting confidential resident or patient information into any public answers.
+
+## Visual design
+
+The website uses an editorial study-journal style: warm ivory paper, charcoal navigation, copper accents, serif reading typography and a simple C monogram. The former mint-green dashboard styling is replaced across Dashboard, Recall Practice, Question Library and Study Room.
 
 ## Study Room — calm, focused listening
 

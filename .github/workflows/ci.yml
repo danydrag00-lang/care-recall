@@ -1,0 +1,46 @@
+name: CareRecall quality checks
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'assets/*.js'
+      - 'listen.html'
+      - 'practice.html'
+      - 'library.html'
+      - 'index.html'
+      - 'sw.js'
+      - 'tests/**'
+      - '.github/workflows/ci.yml'
+  pull_request:
+    paths:
+      - 'assets/*.js'
+      - 'listen.html'
+      - 'practice.html'
+      - 'library.html'
+      - 'index.html'
+      - 'sw.js'
+      - 'tests/**'
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate JavaScript syntax
+        run: |
+          node --check assets/app.js
+          node --check assets/saved-audio.js
+          node --check assets/data.js
+          node --check sw.js
+      - name: Test listening player and question navigation
+        run: node --test tests/site.test.js

@@ -1,7 +1,7 @@
 /* CareRecall saved-audio interview player.
- * Uses 144 pre-generated Kokoro British English recordings (one question and answer per item).
+ * Uses saved Kokoro MP3s for original answers and locally generated speech for personal edits.
  * Repeats the same question + answer until the learner presses Next when Repeat is on.
- * Never generates audio or calls a paid service in the visitor's browser.
+ * Personal editing uses a browser-local neural model; no device voices or paid API.
  */
 (() => {
   "use strict";
@@ -291,7 +291,7 @@
       const ms = gapRemaining, fn = gapTarget;
       setGap(ms,fn);setStatus("Continuing…");return;
     }
-    if(stage==="answer" && hasPersonalEdit(items[index]) && !canUseRevision(items[index])){
+    if(stage==="answer" && hasPersonalEdit(items[index]) && (!canUseRevision(items[index]) || !currentAudio)){
       startSound("answer");
       return;
     }

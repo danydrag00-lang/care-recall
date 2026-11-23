@@ -96,6 +96,18 @@ function initRecordingStudio(){
   $('recording-batch').addEventListener('change',scriptForBatch);
   $('recording-version').addEventListener('change',scriptForBatch);
   scriptForBatch();
+  const cartesiaVoiceId='273f9ef7-9fc2-4def-88bb-ab108c6249ca';
+  const copyVoiceId=$('cartesia-copy-id');
+  if(copyVoiceId)copyVoiceId.addEventListener('click',async()=>{
+    try{
+      await navigator.clipboard.writeText(cartesiaVoiceId);
+      toast('Julia voice ID copied · choose Julia in Cartesia');
+    }catch(e){
+      const idElement=$('cartesia-voice-id');
+      if(idElement){const range=document.createRange();range.selectNodeContents(idElement);const selection=window.getSelection();selection.removeAllRanges();selection.addRange(range)}
+      toast('Voice ID selected · press Command+C or Ctrl+C to copy');
+    }
+  });
   $('recording-copy').addEventListener('click',async()=>{
     try{await navigator.clipboard.writeText(script);toast('Script copied · paste it into Cartesia or TwoShot')}catch(e){$('recording-script').focus();$('recording-script').select();toast('Select the script and copy it manually')}
   });

@@ -80,46 +80,46 @@ function loadVoices(){if(!supported)return;const all=speechSynthesis.getVoices()
 if(supported){loadVoices();if('onvoiceschanged' in speechSynthesis)speechSynthesis.addEventListener('voiceschanged',loadVoices)}else{audio.disabled=true;status('Speech playback is not supported in this browser. Try Safari, Chrome or Edge.')}buildPlaylist();window.addEventListener('pagehide',stopSpeech);
 }
 
-function initElevenLabs(){
-  if(!$('eleven-script'))return;
+function initRecordingStudio(){
+  if(!$('recording-script'))return;
   const batches=[];
   for(let i=0;i<QUESTIONS.length;i+=4)batches.push(QUESTIONS.slice(i,i+4));
-  $('eleven-batch').innerHTML=batches.map((b,i)=>`<option value="${i}">Questions ${b[0].id}–${b[b.length-1].id}</option>`).join('');
+  $('recording-batch').innerHTML=batches.map((b,i)=>`<option value="${i}">Questions ${b[0].id}–${b[b.length-1].id}</option>`).join('');
   let script='';
   function scriptForBatch(){
-    const selected=batches[Number($('eleven-batch').value)]||batches[0];
-    const kind=$('eleven-version').value;
+    const selected=batches[Number($('recording-batch').value)]||batches[0];
+    const kind=$('recording-version').value;
     script=selected.map(q=>`Question ${q.id}. ${q.question}\n\n${kind==='full'?q.full:q.short}\n\n`).join('\n');
-    $('eleven-script').value=script;
-    $('eleven-count').textContent=`${script.length.toLocaleString('en-GB')} characters · ${selected.length} questions · ${kind==='full'?'full':'short'} answers`;
+    $('recording-script').value=script;
+    $('recording-count').textContent=`${script.length.toLocaleString('en-GB')} characters · ${selected.length} questions · ${kind==='full'?'full':'short'} answers`;
   }
-  $('eleven-batch').addEventListener('change',scriptForBatch);
-  $('eleven-version').addEventListener('change',scriptForBatch);
+  $('recording-batch').addEventListener('change',scriptForBatch);
+  $('recording-version').addEventListener('change',scriptForBatch);
   scriptForBatch();
-  $('eleven-copy').addEventListener('click',async()=>{
-    try{await navigator.clipboard.writeText(script);toast('Script copied · paste it into ElevenLabs')}catch(e){$('eleven-script').focus();$('eleven-script').select();toast('Select the script and copy it manually')}
+  $('recording-copy').addEventListener('click',async()=>{
+    try{await navigator.clipboard.writeText(script);toast('Script copied · paste it into Cartesia or TwoShot')}catch(e){$('recording-script').focus();$('recording-script').select();toast('Select the script and copy it manually')}
   });
-  $('eleven-save-text').addEventListener('click',()=>{
-    const batch=batches[Number($('eleven-batch').value)]||batches[0];
+  $('recording-save-text').addEventListener('click',()=>{
+    const batch=batches[Number($('recording-batch').value)]||batches[0];
     const blob=new Blob([script],{type:'text/plain;charset=utf-8'});
     const url=URL.createObjectURL(blob);
     const link=document.createElement('a');link.href=url;
-    link.download=`care-recall-${String(batch[0].id).padStart(2,'0')}-${String(batch[batch.length-1].id).padStart(2,'0')}-${$('eleven-version').value}.txt`;
+    link.download=`care-recall-${String(batch[0].id).padStart(2,'0')}-${String(batch[batch.length-1].id).padStart(2,'0')}-${$('recording-version').value}.txt`;
     document.body.appendChild(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(url),3000);
   });
-  const player=$('eleven-player'),filesInput=$('eleven-files'),queue=$('eleven-queue');
+  const player=$('recording-player'),filesInput=$('recording-files'),queue=$('recording-queue');
   let tracks=[],activeIndex=0;
-  function cleanup(){tracks.forEach(t=>URL.revokeObjectURL(t.url));tracks=[];activeIndex=0;player.pause();player.removeAttribute('src');player.load();$('eleven-current').textContent='No recordings selected yet';queue.innerHTML='';$('eleven-prev').disabled=true;$('eleven-next').disabled=true}
+  function cleanup(){tracks.forEach(t=>URL.revokeObjectURL(t.url));tracks=[];activeIndex=0;player.pause();player.removeAttribute('src');player.load();$('recording-current').textContent='No recordings selected yet';queue.innerHTML='';$('recording-prev').disabled=true;$('recording-next').disabled=true}
   function updateAudio(autoplay=false){
     const item=tracks[activeIndex];if(!item)return;
-    player.src=item.url;player.playbackRate=Number($('eleven-speed').value)||1;
-    $('eleven-current').textContent=`Recording ${activeIndex+1} of ${tracks.length}: ${item.name}`;
-    $('eleven-prev').disabled=activeIndex===0;
-    $('eleven-next').disabled=tracks.length<2||activeIndex===tracks.length-1&&!$('eleven-loop').checked;
+    player.src=item.url;player.playbackRate=Number($('recording-speed').value)||1;
+    $('recording-current').textContent=`Recording ${activeIndex+1} of ${tracks.length}: ${item.name}`;
+    $('recording-prev').disabled=activeIndex===0;
+    $('recording-next').disabled=tracks.length<2||activeIndex===tracks.length-1&&!$('recording-loop').checked;
     [...queue.querySelectorAll('button')].forEach((btn,i)=>{btn.classList.toggle('active',i===activeIndex);btn.setAttribute('aria-current',String(i===activeIndex))});
     if(autoplay){const promise=player.play();if(promise&&promise.catch)promise.catch(()=>toast('Press play to continue the audio'))}
   }
-  function move(step){if(!tracks.length)return;const next=activeIndex+step;if(next<0)return;if(next>=tracks.length){if(!$('eleven-loop').checked)return;activeIndex=0}else activeIndex=next;updateAudio(true)}
+  function move(step){if(!tracks.length)return;const next=activeIndex+step;if(next<0)return;if(next>=tracks.length){if(!$('recording-loop').checked)return;activeIndex=0}else activeIndex=next;updateAudio(true)}
   filesInput.addEventListener('change',()=>{
     cleanup();
     const files=Array.from(filesInput.files||[]).filter(f=>f.type.startsWith('audio/')||/\.(mp3|wav|m4a|ogg)$/i.test(f.name)).sort((a,b)=>a.name.localeCompare(b.name,undefined,{numeric:true}));
@@ -129,13 +129,13 @@ function initElevenLabs(){
     [...queue.querySelectorAll('button')].forEach((b,i)=>b.addEventListener('click',()=>{activeIndex=i;updateAudio(true)}));
     updateAudio(false);toast(`${tracks.length} narration recording${tracks.length===1?'':'s'} loaded`);
   });
-  player.addEventListener('ended',()=>{if(activeIndex+1<tracks.length||$('eleven-loop').checked)move(1)});
+  player.addEventListener('ended',()=>{if(activeIndex+1<tracks.length||$('recording-loop').checked)move(1)});
   player.addEventListener('error',()=>{if(tracks.length)toast('This recording could not play. Try MP3 format.')});
-  $('eleven-prev').addEventListener('click',()=>move(-1));$('eleven-next').addEventListener('click',()=>move(1));
-  $('eleven-speed').addEventListener('change',()=>player.playbackRate=Number($('eleven-speed').value)||1);
-  $('eleven-loop').addEventListener('change',()=>{if(tracks.length){$('eleven-next').disabled=tracks.length<2||activeIndex===tracks.length-1&&!$('eleven-loop').checked}});
+  $('recording-prev').addEventListener('click',()=>move(-1));$('recording-next').addEventListener('click',()=>move(1));
+  $('recording-speed').addEventListener('change',()=>player.playbackRate=Number($('recording-speed').value)||1);
+  $('recording-loop').addEventListener('change',()=>{if(tracks.length){$('recording-next').disabled=tracks.length<2||activeIndex===tracks.length-1&&!$('recording-loop').checked}});
   window.addEventListener('pagehide',cleanup);
 }
 
-refreshSidebar();registerSW();initHome();initPractice();initLibrary();initAudio();initElevenLabs();
+refreshSidebar();registerSW();initHome();initPractice();initLibrary();initAudio();initRecordingStudio();
 })();

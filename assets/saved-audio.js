@@ -26,7 +26,7 @@
   function ui() {
     play.disabled = !available || !items.length;
     stop.disabled = !active;
-    next.disabled = !items.length || (index === items.length - 1 && !playlistLoop.checked);
+    next.disabled = !items.length;
     prev.disabled = index <= 0;
     play.textContent = active && !paused ? "❚❚ Pause" : (active && paused ? "▶ Resume" : "▶ Play");
     stageLabel.textContent = stage === "question" ? "QUESTION" : stage === "answer" ? "ANSWER" : stage === "thinking" ? "TIME TO THINK" : "READY";
@@ -165,7 +165,6 @@
     if (active) {stopped();setStatus("This recording is missing or could not play. The saved MP3 generation may still be running.");}
   });
   window.addEventListener("pagehide",() => stopped());
-  $("saved-repeat-label").addEventListener("click",() => {}); // accessible label toggles its native checkbox
   async function checkSavedAudio() {
     available = false;stopped();ui();reload.disabled = true;
     setStatus("Checking for the 72 saved question-and-answer recordings…");

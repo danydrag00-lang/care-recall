@@ -61,3 +61,15 @@
 .recording-provider-links .btn{min-width:175px}
 @media(max-width:800px){.kokoro-grid{grid-template-columns:1fr}.kokoro-options{grid-template-columns:1fr 1fr}}
 @media(max-width:560px){.kokoro-header{display:block}.kokoro-tag{display:inline-block;margin-top:12px}.kokoro-options{grid-template-columns:1fr}.kokoro-options .field:first-child,.kokoro-check{grid-column:auto}.kokoro-options,.kokoro-playback{padding:17px}.kokoro-buttons .btn{flex:1}.recording-provider-links{flex-direction:column}.recording-provider-links .btn{width:100%}}
+
+
+/* User-selected Cartesia narrator */
+.cartesia-voice-preset{margin:18px 0 10px;padding:18px;border-radius:16px;border:1px solid #b9ddd5;background:linear-gradient(125deg,#e9faf4,#f8fffd)}
+.cartesia-voice-heading h3{font-size:17px;letter-spacing:-.4px;margin:5px 0 6px}
+.cartesia-voice-accent{display:inline-block;color:#11796f;font-size:12px;margin-left:5px;letter-spacing:0}
+.cartesia-voice-preset>p{color:var(--muted);font-size:12px;line-height:1.65;margin:8px 0}
+.cartesia-voice-id-row{display:flex;align-items:center;gap:9px;margin-top:12px;flex-wrap:wrap}
+.cartesia-voice-id-row code{background:#fff;border:1px solid #d2e6e1;border-radius:9px;padding:11px;min-width:0;max-width:100%;overflow-wrap:anywhere;font-size:12px;color:#16483f}
+.cartesia-voice-id-row .btn{white-space:nowrap}
+.cartesia-voice-preset .cartesia-voice-note{font-size:11px;line-height:1.6}
+@media(max-width:480px){.cartesia-voice-id-row{align-items:stretch;flex-direction:column}.cartesia-voice-id-row .btn{width:100%}}

@@ -57,3 +57,16 @@ jobs:
               exit 1
             fi
           done
+      - name: Verify all 72 uploaded-answer MP3s are published and playable
+        run: |
+          set -eu
+          ROOT='https://danydrag00-lang.github.io/care-recall/audio/answers-full'
+          for id in $(seq -w 001 072); do
+            url="$ROOT/$id.mp3"
+            status=$(curl -sS -L -I --retry 3 --retry-delay 2 -o /dev/null -w '%{http_code}' --max-time 20 "$url")
+            echo "Emma uploaded answer Q$id => HTTP $status"
+            if [ "$status" != '200' ] && [ "$status" != '206' ]; then
+              echo "Missing full-answer recording: $url" >&2
+              exit 1
+            fi
+          done

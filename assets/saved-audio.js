@@ -15,6 +15,7 @@
   const topic = $("saved-topic"), rate = $("saved-rate"), think = $("saved-think");
   const repeat = $("saved-repeat"), playlistLoop = $("saved-loop"), reload = $("saved-reload");
   const voice = $("saved-voice"), voiceLabel = $("saved-voice-label");
+  const jumpSearch = $("saved-jump-search"), jumpSelect = $("saved-jump-select"), jumpGo = $("saved-jump-go"), jumpHint = $("saved-jump-hint");
   const VOICES = { bf_emma: "Emma", bf_isabella: "Isabella", bm_george: "George" };
   const all = window.CARE_DATA?.questions ?? [];
   let items = [], index = 0, available = true, active = false, paused = false;
@@ -56,6 +57,7 @@
     }
     count.textContent = "Question " + (index + 1) + " of " + items.length + " · Q" + q.id;
     question.textContent = q.question;
+    if (!jumpSearch.value.trim() && [...jumpSelect.options].some(option => option.value === String(q.id))) jumpSelect.value = String(q.id);
     answer.textContent = answerText(q);
     answerKind.textContent = answerMode === "full" ? "MY UPLOADED ANSWER" : "SHORT ANSWER";
     progress.value = items.length ? index / items.length : 0;
@@ -160,6 +162,79 @@
     if (items.length) src("question");
     setStatus("Ready. Press Play to hear each question and its answer.");
   }
+  function populateJumpList() {
+    const search = jumpSearch.value.trim().toLocaleLowerCase("en-GB");
+    const oldId = jumpSelect.value;
+    const matching = all.filter(q =>
+      !search ||
+      String(q.id) === search.replace(/^q(?:uestion)?\s*#?/i, "").trim() ||
+      q.question.toLocaleLowerCase("en-GB").includes(search) ||
+      (q.category || "").toLocaleLowerCase("en-GB").includes(search)
+    );
+    jumpSelect.replaceChildren();
+    if (!matching.length) {
+      const option = document.createElement("option");
+      option.value = "";
+      option.textContent = "No matching questions";
+      jumpSelect.appendChild(option);
+      jumpGo.disabled = true;
+      jumpHint.textContent = "No questions match your search. Try another word or number.";
+      return;
+    }
+    for (const q of matching) {
+      const option = document.createElement("option");
+      option.value = String(q.id);
+      option.textContent = "Q" + String(q.id).padStart(2,"0") + " — " + q.question;
+      jumpSelect.appendChild(option);
+    }
+    const currentId = String(items[index]?.id ?? "");
+    jumpSelect.value = matching.some(q => String(q.id) === oldId) ? oldId
+      : matching.some(q => String(q.id) === currentId) ? currentId
+      : String(matching[0].id);
+    jumpGo.disabled = false;
+    jumpHint.textContent = matching.length + " question" + (matching.length === 1 ? "" : "s") +
+      " available. Select one and press Jump & Play. Your settings will stay the same.";
+  }
+  function jumpToSelectedQuestion() {
+    const targetId = Number(jumpSelect.value);
+    const selected = all.find(q => q.id === targetId);
+    if (!selected) {
+      setStatus("Choose a question from the list first.");
+      return;
+    }
+    stopped();
+    // A direct jump always works, even when a different topic filter is active.
+    if (topic.value !== "all" && topic.value !== selected.category) {
+      topic.value = "all";
+      items = all.slice();
+    }
+    const newIndex = items.findIndex(q => q.id === selected.id);
+    if (newIndex < 0) {
+      topic.value = "all";
+      items = all.slice();
+      index = items.findIndex(q => q.id === selected.id);
+    } else {
+      index = newIndex;
+    }
+    render();
+    active = true;
+    paused = false;
+    startQuestion();
+    question.scrollIntoView?.({block:"nearest",behavior:"smooth"});
+  }
+  jumpSearch.addEventListener("input",populateJumpList);
+  jumpSearch.addEventListener("keydown",event => {
+    if (event.key === "Enter" && !jumpGo.disabled) {
+      event.preventDefault();
+      jumpToSelectedQuestion();
+    }
+  });
+  jumpGo.addEventListener("click",jumpToSelectedQuestion);
+  jumpSelect.addEventListener("change",() => {
+    const selected = all.find(q => q.id === Number(jumpSelect.value));
+    if (selected) jumpHint.textContent = "Selected Q" + selected.id +
+      ". Press Jump & Play to hear it. Your current voice and answer version are preserved.";
+  });
   for(const cat of [...new Set(all.map(q => q.category).filter(Boolean))]) {
     const opt=document.createElement("option");opt.value=cat;opt.textContent=cat;topic.appendChild(opt);
   }
@@ -226,5 +301,5 @@
     }
   }
   reload.addEventListener("click",checkSavedAudio);
-  changeTopic();checkSavedAudio();
+  changeTopic();populateJumpList();checkSavedAudio();
 })();

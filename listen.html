@@ -20,12 +20,12 @@
         <h3 id="saved-question">Tell me about yourself.</h3>
       </div>
       <div class="saved-answer-box">
-        <div class="saved-answer-heading"><span class="saved-answer-icon" aria-hidden="true">✓</span><span>YOUR ANSWER · Short version</span></div>
+        <div class="saved-answer-heading"><span class="saved-answer-icon" aria-hidden="true">✓</span><span id="saved-answer-kind">SHORT ANSWER</span></div>
+        <div class="saved-answer-switch" role="group" aria-label="Choose which answer to read and hear">
+          <button type="button" id="saved-answer-short" class="saved-answer-choice is-active" aria-pressed="true">Short answer</button>
+          <button type="button" id="saved-answer-full" class="saved-answer-choice" aria-pressed="false">My uploaded answer</button>
+        </div>
         <p id="saved-answer">Your short answer appears here.</p>
-        <details open class="saved-original">
-          <summary>Show your original full answer</summary>
-          <p id="saved-full-answer"></p>
-        </details>
       </div>
       <progress id="saved-progress" max="1" value="0" aria-label="Questions completed"></progress>
       <div class="saved-transport">
@@ -48,7 +48,7 @@
       <label class="saved-check" id="saved-repeat-label"><input type="checkbox" id="saved-repeat" checked><span><strong>Repeat this question</strong><small>Keep repeating the question and answer until I press Next.</small></span></label>
       <label class="saved-check"><input type="checkbox" id="saved-loop"><span><strong>Repeat the full list</strong><small>Start again at Question 1 after the final question.</small></span></label>
       <button type="button" class="btn btn-outline saved-reload" id="saved-reload">↻ Check recordings</button>
-      <p class="saved-note">Your answer is always shown below the question. Audio reads the short answer, and your full original answer is visible. Repeat mode is on by default. Isabella and George are being added as saved voice choices; Emma is already available.</p>
+      <p class="saved-note">Choose Short answer or My uploaded answer. The chosen text appears immediately, and Play uses its saved audio recording. Repeat mode is on by default. Newly generated full-answer recordings may take time to appear.</p>
     </aside>
   </div>
 </section>

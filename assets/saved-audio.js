@@ -202,8 +202,13 @@
     ui();
   }
   function src(kind) {
-    const q = items[index]; if (!q) return;
-    const path = filePath(kind,q.id);
+    const q = items[index]; if (!q) return false;
+    const custom = kind==="answer" && hasPersonalEdit(q);
+    const path = custom ? neural?.cached(answerText(q),voice.value) : filePath(kind,q.id);
+    if(!path){
+      audio.pause();audio.removeAttribute("src");currentAudio="";audio.load();
+      return false;
+    }
     if (path !== currentAudio) {
       currentAudio = path;
       audio.src = path;audio.load();
@@ -211,12 +216,27 @@
       try { audio.currentTime = 0; } catch (_) {}
     }
     audio.playbackRate = Number(rate.value) || 1;
+    return true;
   }
   function startSound(kind) {
     if (!active || paused) return;
     timerClear();
-    stage = kind;src(kind);ui();
-    setStatus(kind === "question" ? "Playing the question…" : "Playing the saved answer…");
+    stage=kind;ui();
+    if(kind==="answer" && hasPersonalEdit(items[index]) && !canUseRevision(items[index])){
+      const snapshot=generation, q=items[index], sig=revisedKey(q);
+      setStatus("Preparing narration for your edited answer…");
+      void prepareRevision(q).then(url=>{
+        if(url && generation===snapshot && active && !paused && stage==="answer"
+            && items[index]?.id===q.id && revisedKey(q)===sig)startSound("answer");
+      }).catch(()=>{if(generation===snapshot&&active)stopped();});
+      return;
+    }
+    if(!src(kind)){
+      setStatus("Your revised narration is still being prepared. The edited answer is saved.");
+      return;
+    }
+    setStatus(kind==="question"?"Playing the question…":
+      hasPersonalEdit(items[index])?"Playing your revised answer…":"Playing the saved answer…");
     const playGeneration = generation;
     const result = audio.play();
     if (result && result.catch) result.catch(error => {
@@ -270,6 +290,10 @@
     if (stage === "thinking" && gapTarget) {
       const ms = gapRemaining, fn = gapTarget;
       setGap(ms,fn);setStatus("Continuing…");return;
+    }
+    if(stage==="answer" && hasPersonalEdit(items[index]) && !canUseRevision(items[index])){
+      startSound("answer");
+      return;
     }
     const p = audio.play();
     if (p && p.catch) p.catch(() => setStatus("Press Play again to resume the recording."));
@@ -401,7 +425,7 @@
     answerOnlyMode = false;
     answerMode = nextMode;
     render();
-    if (items.length) src("answer");
+    if(items.length && !hasPersonalEdit(items[index]))src("answer");
     const label = answerMode === "full" ? "your uploaded answer" : "the short answer";
     setStatus("Showing " + label + ". Checking the selected MP3 recording; you can play it as soon as the audio status says Ready.");
   }

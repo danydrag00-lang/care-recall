@@ -11,6 +11,10 @@
   const audio = $("saved-audio"), status = $("saved-status"), question = $("saved-question");
   const answer = $("saved-answer"), answerKind = $("saved-answer-kind");
   const shortButton = $("saved-answer-short"), fullButton = $("saved-answer-full");
+  const editToggle = $("saved-edit-toggle"), editForm = $("saved-edit-form");
+  const editText = $("saved-edit-text"), editCancel = $("saved-edit-cancel"), editReset = $("saved-edit-reset");
+  const editBadge = $("saved-edit-badge"), editFeedback = $("saved-edit-feedback");
+  const edits = window.CareRecallEdits || null, neural = window.CareRecallVoice || null;
   const count = $("saved-position"), stageLabel = $("saved-stage"), progress = $("saved-progress");
   const topic = $("saved-topic"), rate = $("saved-rate"), think = $("saved-think");
   const repeat = $("saved-repeat"), playlistLoop = $("saved-loop"), reload = $("saved-reload");
@@ -37,6 +41,64 @@
     return root + folder + String(id).padStart(3,"0") + ".mp3";
   };
   const answerText = q => (answerMode === "full" ? q.full : q.short) ?? "";
+  const hasPersonalEdit = q => Boolean(q && edits?.has(q.id,answerMode));
+  const revisedKey = q => q.id + ":" + answerMode + ":" + voice.value + ":" + answerText(q);
+  let currentRevisionRequest = "", pendingRevision = null;
+  function canUseRevision(q) {
+    return Boolean(q && hasPersonalEdit(q) && neural?.cached(answerText(q),voice.value));
+  }
+  function prepareRevision(q, afterSave=false) {
+    if (!hasPersonalEdit(q) || !neural?.prepare) return Promise.resolve(null);
+    const signature = revisedKey(q);
+    const existing = neural.cached(answerText(q),voice.value);
+    if (existing) {
+      checkedReady=true;
+      availabilityLabel.textContent="✓ Your updated answer narration is ready.";
+      fallback.hidden=true;
+      return Promise.resolve(existing);
+    }
+    if (pendingRevision && currentRevisionRequest===signature) return pendingRevision;
+    currentRevisionRequest=signature;
+    checkedReady=null;
+    fallback.hidden=true;
+    availabilityLabel.textContent="Updating spoken version of your edited answer…";
+    const text=answerText(q), selectedVoice=voice.value;
+    const work=neural.prepare(text,selectedVoice,message=>{
+      if(items[index]?.id===q.id && revisedKey(q)===signature){
+        availabilityLabel.textContent=message;
+        if(afterSave && !active)setStatus(message);
+      }
+    }).then(url=>{
+      if(items[index]?.id===q.id && revisedKey(q)===signature){
+        checkedReady=true;
+        fallback.hidden=true;
+        availabilityLabel.textContent="✓ Updated narration ready. Press Play.";
+        if(!active)setStatus("Your edited answer is ready to listen to.");
+      }
+      return url;
+    }).catch(error=>{
+      if(items[index]?.id===q.id && revisedKey(q)===signature){
+        checkedReady=false;
+        availabilityLabel.textContent="Could not prepare edited narration on this browser. Your answer is saved; retry Play.";
+        setStatus("Kokoro voice update failed: "+String(error?.message || error));
+      }
+      throw error;
+    }).finally(()=>{
+      if(currentRevisionRequest===signature){pendingRevision=null;currentRevisionRequest="";}
+    });
+    pendingRevision=work;
+    work.catch(()=>{});
+    return work;
+  }
+  function updateEditControls(q) {
+    editBadge.hidden=!hasPersonalEdit(q);
+    editToggle.textContent=hasPersonalEdit(q)?"✎ Edit my revision":"✎ Edit answer";
+    if(q)editReset.disabled=!hasPersonalEdit(q);
+  }
+  function closeEditForm() {
+    editForm.hidden=true;
+    editToggle.setAttribute("aria-expanded","false");
+  }
 
   const selectedName = () => (VOICES[voice.value] || "Emma") +
     " · " + (answerMode === "full" ? "uploaded answer" : "short answer");
@@ -49,6 +111,15 @@
   async function checkCurrentAudio() {
     const q = items[index];
     if (!q) return;
+    if(hasPersonalEdit(q)){
+      availabilityCheck++;
+      const cached=canUseRevision(q);
+      checkedReady=cached?true:null;
+      fallback.hidden=true;
+      if(cached)availabilityLabel.textContent="✓ Your updated narration is ready.";
+      else {availabilityLabel.textContent="Updating Kokoro narration for your personal edit…";void prepareRevision(q);}
+      return;
+    }
     const requestNumber = ++availabilityCheck;
     const selection = voice.value + "/" + answerMode + "/" + q.id;
     checkedClip = selection;
@@ -117,6 +188,8 @@
     }
     answer.textContent = answerText(q);
     answerKind.textContent = answerMode === "full" ? "MY UPLOADED ANSWER" : "SHORT ANSWER";
+    updateEditControls(q);
+    closeEditForm();
     progress.value = items.length ? index / items.length : 0;
     ui();
     void checkCurrentAudio();

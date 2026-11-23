@@ -1,5 +1,5 @@
 /* CareRecall v13 — network-first static assets, direct streaming of saved MP3s. */
-const CACHE='care-recall-v13';
+const CACHE='care-recall-v14';
 const ASSETS=['./','./index.html','./practice.html','./listen.html','./library.html','./assets/style.css','./assets/data.js','./assets/app.js','./assets/saved-audio.js','./assets/favicon.svg','./manifest.webmanifest'];
 self.addEventListener('install',e=>{
   e.waitUntil(caches.open(CACHE).then(c=>c.addAll(ASSETS)));

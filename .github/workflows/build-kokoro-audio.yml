@@ -39,16 +39,30 @@ jobs:
           ls -lh model-cache
       - name: Generate 72 questions and answers
         run: python tools/generate_kokoro_audio.py
-      - name: Commit saved recordings on latest main
+      - name: Publish saved recordings safely, even if other edits landed during generation
         run: |
+          mkdir -p /tmp/care-recall-all-audio
+          cp -a audio/. /tmp/care-recall-all-audio/
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add audio/
-          if ! git diff --cached --quiet; then
-            git commit -m 'Add pre-generated Kokoro narration for 72 interview Q&A'
+          for attempt in 1 2 3 4; do
             git fetch origin main
-            git rebase origin/main
-            git push origin HEAD:main
-          else
-            echo 'All 144 saved MP3s already exist in the repository.'
-          fi
+            git reset --hard origin/main
+            mkdir -p audio
+            cp -an /tmp/care-recall-all-audio/. audio/
+            cp -f /tmp/care-recall-all-audio/manifest.json audio/manifest.json
+            git add audio/
+            if git diff --cached --quiet; then
+              echo 'All generated recordings already published.'
+              break
+            fi
+            git commit -m 'Publish saved Kokoro Q&A recordings'
+            if git push origin HEAD:main; then
+              echo 'All generated recordings published to main.'
+              break
+            fi
+            if [ "$attempt" -eq 4 ]; then
+              echo 'Error: unable to publish recordings after four attempts.' >&2
+              exit 1
+            fi
+          done

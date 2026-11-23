@@ -188,6 +188,17 @@ test("jump moves to any question and retains voice, answer mode and repeat", asy
   assert.equal(h.get("saved-audio").src, "audio/voices/bf_isabella/questions/042.mp3");
 });
 
+test("Next after a searched jump clears the stale search and selects the new question", () => {
+  const h = harness();
+  h.input("saved-jump-search", "Q42");
+  h.click("saved-jump-go");
+  assert.equal(h.get("saved-jump-select").value, "42");
+  h.click("saved-next");
+  assert.equal(h.get("saved-jump-search").value, "");
+  assert.equal(h.get("saved-jump-select").value, "43");
+  assert.equal(h.get("saved-jump-select").options.length, 72);
+});
+
 test("answer tabs change both visible answer and MP3 path", async () => {
   const h = harness();
   h.click("saved-answer-full");

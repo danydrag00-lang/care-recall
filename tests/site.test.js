@@ -9,6 +9,7 @@ const vm = require("node:vm");
 const ROOT = path.resolve(__dirname, "..");
 const page = fs.readFileSync(path.join(ROOT, "listen.html"), "utf8");
 const code = fs.readFileSync(path.join(ROOT, "assets/saved-audio.js"), "utf8");
+const answerEditsCode = fs.readFileSync(path.join(ROOT, "assets/answer-edits.js"), "utf8");
 const rawData = fs.readFileSync(path.join(ROOT, "assets/data.js"), "utf8");
 const bank = JSON.parse(rawData.replace(/^[\s\S]*?window\.CARE_DATA\s*=\s*/, "").replace(/;\s*$/, ""));
 const questions = bank.questions;
@@ -21,6 +22,17 @@ function harness(options = {}) {
   let timerId = 0;
   const recordedFetches = [];
   const unavailable = options.unavailable || (() => false);
+  const savedStorage = options.storage || new Map();
+  const preparedSpeech = new Map();
+  const neuralMock = options.neural || {
+    cached: (text,voice) => preparedSpeech.get(voice+"|"+text)||null,
+    prepare: async (text,voice,report) => {
+      report("Preparing revised narration");
+      const url="blob:care-recall-"+encodeURIComponent(voice+"|"+text).slice(0,70);
+      preparedSpeech.set(voice+"|"+text,url);
+      return url;
+    }
+  };
 
   function get(id) {
     if (!els.has(id)) {
@@ -79,7 +91,12 @@ function harness(options = {}) {
       },
     },
     window: {
-      CARE_DATA: bank,
+      CARE_DATA: structuredClone(bank),
+      CareRecallVoice: neuralMock,
+      localStorage: {
+        getItem: key => savedStorage.get(key)||null,
+        setItem: (key,value) => savedStorage.set(key,value)
+      },
       location: {search: options.search || ""},
       addEventListener(event,fn) { windowListeners[event] = fn; },
     },
@@ -108,6 +125,7 @@ function harness(options = {}) {
     Date,
   };
 
+  vm.runInNewContext(answerEditsCode,context,{filename:"assets/answer-edits.js",timeout:1000});
   vm.runInNewContext(code, context, {filename: "assets/saved-audio.js", timeout: 1000});
 
   async function flush() {
@@ -140,7 +158,7 @@ function harness(options = {}) {
     pending.delete(first[0]);
     first[1]();
   }
-  return {get, click, change, input, flush, endAudio, advanceTimeout, recordedFetches, options, bodyClasses, windowListeners};
+  return {get, click, change, input, flush, endAudio, advanceTimeout, recordedFetches, options, bodyClasses, windowListeners, savedStorage, context};
 }
 
 test("question data and listening markup are complete", () => {
@@ -338,6 +356,60 @@ test("service worker never caches streamed audio or partial HTTP responses", () 
   assert.match(worker, /request\.headers\.has\('range'\)/);
   assert.match(worker, /response\.status===200/);
   assert.match(worker, /\.catch\(\(\)=>\{\}\)/);
+});
+
+test("Edit answer saves the correct version and Play uses regenerated speech, not old MP3", async () => {
+  const h=harness();
+  h.click("saved-answer-full");
+  h.click("saved-edit-toggle");
+  assert.equal(h.get("saved-edit-form").hidden,false);
+  h.get("saved-edit-text").value="My revised answer explains dignity and respect for every resident.";
+  h.get("saved-edit-form").listeners.submit({preventDefault(){}});
+  await h.flush();
+  assert.equal(h.get("saved-answer").textContent,"My revised answer explains dignity and respect for every resident.");
+  assert.equal(h.get("saved-edit-badge").hidden,false);
+  h.click("saved-play-answer");
+  assert(h.get("saved-audio").src.startsWith("blob:care-recall-"));
+  assert(h.get("saved-audio").src.includes("bf_emma"));
+  assert.notEqual(h.get("saved-audio").src,"audio/answers-full/001.mp3");
+  assert.equal(h.get("saved-audio").playing,true);
+  h.click("saved-answer-short");
+  assert.equal(h.get("saved-answer").textContent,questions[0].short);
+  h.click("saved-play-answer");
+  assert.equal(h.get("saved-audio").src,"audio/answers/001.mp3");
+});
+
+test("Edited answers survive a page reload and Restore original restores the saved MP3", async () => {
+  const storage=new Map();
+  const h=harness({storage});
+  h.click("saved-edit-toggle");
+  h.get("saved-edit-text").value="My own clear and personalised short answer.";
+  h.get("saved-edit-form").listeners.submit({preventDefault(){}});
+  await h.flush();
+  assert(storage.has("care-recall-answer-edits-v1"));
+  const reloaded=harness({storage});
+  await reloaded.flush();
+  assert.equal(reloaded.get("saved-answer").textContent,"My own clear and personalised short answer.");
+  reloaded.click("saved-edit-toggle");
+  reloaded.click("saved-edit-reset");
+  await reloaded.flush();
+  assert.equal(reloaded.get("saved-answer").textContent,questions[0].short);
+  reloaded.click("saved-play-answer");
+  assert.equal(reloaded.get("saved-audio").src,"audio/answers/001.mp3");
+  assert.equal(reloaded.get("saved-edit-badge").hidden,true);
+});
+
+test("Changing narrator regenerates speech for the personal revision", async () => {
+  const h=harness();
+  h.click("saved-edit-toggle");
+  h.get("saved-edit-text").value="I provide compassionate and individual support.";
+  h.get("saved-edit-form").listeners.submit({preventDefault(){}});
+  await h.flush();
+  h.change("saved-voice","bf_isabella");
+  await h.flush();
+  h.click("saved-play-answer");
+  assert(h.get("saved-audio").src.includes("bf_isabella"));
+  assert(h.get("saved-audio").src.startsWith("blob:care-recall-"));
 });
 
 test("no device speech synthesis or external voice-service UI remains", () => {

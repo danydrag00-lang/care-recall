@@ -7,7 +7,8 @@
   const data = window.CARE_DATA?.questions || [];
   const byId = new Map(data.map(q => [Number(q.id), q]));
   const originals = new Map();
-  const storage = window.localStorage;
+  let storage = null;
+  try { storage = window.localStorage; } catch (_) { storage = null; }
   let values = {};
   try {
     const raw = storage?.getItem(KEY);

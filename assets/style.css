@@ -63,3 +63,9 @@
 .saved-jump-row .btn{white-space:nowrap;min-height:44px}
 .saved-jump-hint{margin:9px 0 0;font-size:11px;color:#677a79;line-height:1.55}
 @media(max-width:560px){.saved-jump{padding:12px}.saved-jump-row{grid-template-columns:1fr}.saved-jump-row .btn{width:100%}}
+
+
+/* Clearly show when an answer's saved recording is available */
+.saved-availability{font-size:12px;line-height:1.65;color:#315d55;background:#f3faf7;border:1px solid #d5ebe1;border-radius:11px;padding:11px 13px;margin-top:17px}
+.saved-available-button{margin-top:10px;min-height:43px;width:100%;font-size:12px}
+.saved-available-button[hidden]{display:none!important}

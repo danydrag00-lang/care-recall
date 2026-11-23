@@ -1,6 +1,26 @@
 {
   "version": 1,
   "voice": "bf_emma",
+  "voices": [
+    {
+      "id": "bf_emma",
+      "name": "Emma",
+      "accent": "British female",
+      "base": "audio"
+    },
+    {
+      "id": "bf_isabella",
+      "name": "Isabella",
+      "accent": "British female",
+      "base": "audio/voices/bf_isabella"
+    },
+    {
+      "id": "bm_george",
+      "name": "George",
+      "accent": "British male",
+      "base": "audio/voices/bm_george"
+    }
+  ],
   "model": "Kokoro-82M-v1.0",
   "answer_style": "short",
   "question_count": 72,

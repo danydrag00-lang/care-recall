@@ -15,6 +15,7 @@
   const topic = $("saved-topic"), rate = $("saved-rate"), think = $("saved-think");
   const repeat = $("saved-repeat"), playlistLoop = $("saved-loop"), reload = $("saved-reload");
   const voice = $("saved-voice"), voiceLabel = $("saved-voice-label");
+  const focusBtn = $("study-focus");
   const availabilityLabel = $("saved-availability"), fallback = $("saved-use-available");
   const jumpSearch = $("saved-jump-search"), jumpSelect = $("saved-jump-select"), jumpGo = $("saved-jump-go"), jumpHint = $("saved-jump-hint");
   const VOICES = { bf_emma: "Emma", bf_isabella: "Isabella", bm_george: "George" };
@@ -91,7 +92,7 @@
     stop.disabled = !active;
     next.disabled = !items.length;
     prev.disabled = index <= 0;
-    play.textContent = active && !paused ? "❚❚ Pause" : (active && paused ? "▶ Resume" : "▶ Play question & answer");
+    play.textContent = active && !paused ? "❚❚ Pause" : (active && paused ? "▶ Resume" : "▶ Play");
     stageLabel.textContent = stage === "question" ? "QUESTION" : stage === "answer" ? "ANSWER" : stage === "thinking" ? "TIME TO THINK" : "READY";
   }
   function render() {
@@ -369,6 +370,26 @@
       setStatus("The requested MP3 is missing. Use the available Emma short-answer recording or retry after audio publishing completes.");
     }
   });
+  function updateFocusMode(enabled) {
+    document.body.classList.toggle("study-focused", enabled);
+    focusBtn.setAttribute("aria-pressed", String(enabled));
+    focusBtn.innerHTML = enabled
+      ? '<span aria-hidden="true">◲</span> Exit focus'
+      : '<span aria-hidden="true">◱</span> Focus mode';
+    focusBtn.title = enabled ? "Show normal navigation" : "Hide distractions while studying";
+  }
+  if (focusBtn) {
+    focusBtn.addEventListener("click", () => {
+      const current = document.body.classList.contains("study-focused");
+      updateFocusMode(!current);
+    });
+    window.addEventListener("keydown", event => {
+      if (event.key === "Escape" && document.body.classList.contains("study-focused")) {
+        updateFocusMode(false);
+        focusBtn.focus();
+      }
+    });
+  }
   window.addEventListener("pagehide",() => stopped());
   // Recheck missing audio when the learner returns to the tab after publication.
   window.addEventListener("focus", () => {

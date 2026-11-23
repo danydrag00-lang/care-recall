@@ -23,7 +23,7 @@ DATA_FILE = ROOT / "assets" / "data.js"
 OUT_DIR = ROOT / "audio"
 MODEL_FILE = ROOT / "model-cache" / "kokoro-v1.0.onnx"
 VOICES_FILE = ROOT / "model-cache" / "voices-v1.0.bin"
-VOICE = "bf_emma"
+VOICES = (("bf_emma", "Emma", "British female"), ("bf_isabella", "Isabella", "British female"), ("bm_george", "George", "British male"))
 SPEED = 0.93
 
 
@@ -58,13 +58,13 @@ def encode_mp3(samples, sample_rate: int, target: Path) -> None:
         tmp.replace(target)
 
 
-def generate_one(kokoro: Kokoro, words: str, output: Path, force: bool = False) -> None:
+def generate_one(kokoro: Kokoro, words: str, output: Path, voice: str, force: bool = False) -> None:
     if output.is_file() and output.stat().st_size > 1000 and not force:
         print(f"skip {output.relative_to(ROOT)} (already exists)", flush=True)
         return
     for attempt in range(1, 4):
         try:
-            samples, sample_rate = kokoro.create(words, voice=VOICE, speed=SPEED, lang="en-gb")
+            samples, sample_rate = kokoro.create(words, voice=voice, speed=SPEED, lang="en-gb")
             if not len(samples):
                 raise RuntimeError("Kokoro returned empty speech")
             encode_mp3(samples, sample_rate, output)
@@ -86,13 +86,16 @@ def main() -> None:
         raise RuntimeError("Download the Kokoro model and voices into model-cache first")
     OUT_DIR.mkdir(parents=True, exist_ok=True)
     kokoro = Kokoro(str(MODEL_FILE), str(VOICES_FILE))
-    for i, q in enumerate(questions, 1):
-        ident = int(q["id"])
-        q_path = OUT_DIR / "questions" / f"{ident:03d}.mp3"
-        a_path = OUT_DIR / "answers" / f"{ident:03d}.mp3"
-        print(f"[{i}/{len(questions)}] {q['question'][:70]}", flush=True)
-        generate_one(kokoro, f"Question {ident}. {q['question']}", q_path, args.force)
-        generate_one(kokoro, f"Answer. {q['short']}", a_path, args.force)
+    for voice, display_name, accent in VOICES:
+        prefix = OUT_DIR if voice == "bf_emma" else OUT_DIR / "voices" / voice
+        print(f"Making {display_name} ({voice}) recordings", flush=True)
+        for i, q in enumerate(questions, 1):
+            ident = int(q["id"])
+            q_path = prefix / "questions" / f"{ident:03d}.mp3"
+            a_path = prefix / "answers" / f"{ident:03d}.mp3"
+            print(f"[{voice} {i}/{len(questions)}] {q['question'][:70]}", flush=True)
+            generate_one(kokoro, f"Question {ident}. {q['question']}", q_path, voice, args.force)
+            generate_one(kokoro, f"Answer. {q['short']}", a_path, voice, args.force)
     entries = [
         {
             "id": int(q["id"]),
@@ -104,7 +107,8 @@ def main() -> None:
     bank_hash = hashlib.sha256(DATA_FILE.read_bytes()).hexdigest()
     manifest = {
         "version": 1,
-        "voice": VOICE,
+        "voice": "bf_emma",
+        "voices": [{"id": voice, "name": display_name, "accent": accent, "base": ("audio" if voice == "bf_emma" else f"audio/voices/{voice}")} for voice, display_name, accent in VOICES],
         "model": "Kokoro-82M-v1.0",
         "answer_style": "short",
         "question_count": len(questions),
@@ -114,7 +118,7 @@ def main() -> None:
     (OUT_DIR / "manifest.json").write_text(
         json.dumps(manifest, indent=2, ensure_ascii=False) + "\n", encoding="utf-8"
     )
-    print(f"COMPLETE: {len(entries)} questions and {len(entries)} answers", flush=True)
+    print(f"COMPLETE: {len(entries)} questions and {len(entries)} answers per voice × {len(VOICES)} voices", flush=True)
 
 
 if __name__ == "__main__":

@@ -15,6 +15,7 @@
   const topic = $("saved-topic"), rate = $("saved-rate"), think = $("saved-think");
   const repeat = $("saved-repeat"), playlistLoop = $("saved-loop"), reload = $("saved-reload");
   const voice = $("saved-voice"), voiceLabel = $("saved-voice-label");
+  const availabilityLabel = $("saved-availability"), fallback = $("saved-use-available");
   const jumpSearch = $("saved-jump-search"), jumpSelect = $("saved-jump-select"), jumpGo = $("saved-jump-go"), jumpHint = $("saved-jump-hint");
   const VOICES = { bf_emma: "Emma", bf_isabella: "Isabella", bm_george: "George" };
   const all = window.CARE_DATA?.questions ?? [];
@@ -23,6 +24,7 @@
   let stage = "idle", gapTimer = null, gapStart = 0, gapRemaining = 0, gapTarget = null, generation = 0;
   let currentAudio = "";
   let manifest = null;
+  let checkedClip = null, checkedReady = null, availabilityCheck = 0;
 
   const setStatus = message => { status.textContent = message; };
   const filePath = (kind, id) => {
@@ -32,6 +34,48 @@
     return root + folder + String(id).padStart(3,"0") + ".mp3";
   };
   const answerText = q => (answerMode === "full" ? q.full : q.short) ?? "";
+
+  const selectedName = () => (VOICES[voice.value] || "Emma") +
+    " · " + (answerMode === "full" ? "uploaded answer" : "short answer");
+  function tellNotReady(message) {
+    checkedReady = false;
+    if (availabilityLabel) availabilityLabel.textContent = message ||
+      "Not available yet: " + selectedName() + ". The answer text is available, but its MP3 has not been published.";
+    fallback.hidden = voice.value === "bf_emma" && answerMode === "short";
+  }
+  async function checkCurrentAudio() {
+    const q = items[index];
+    if (!q) return;
+    const requestNumber = ++availabilityCheck;
+    const selection = voice.value + "/" + answerMode + "/" + q.id;
+    checkedClip = selection;
+    checkedReady = null;
+    availabilityLabel.textContent = "Checking saved audio for " + selectedName() + "…";
+    fallback.hidden = true;
+    try {
+      const [qResponse, aResponse] = await Promise.all([
+        fetch(filePath("question",q.id),{method:"HEAD",cache:"no-store"}),
+        fetch(filePath("answer",q.id),{method:"HEAD",cache:"no-store"})
+      ]);
+      if(requestNumber !== availabilityCheck) return;
+      const isAudio = response => response.ok &&
+        (!response.headers || /audio|mpeg|octet-stream/i.test(response.headers.get("content-type")||""));
+      if (isAudio(qResponse) && isAudio(aResponse)) {
+        checkedReady = true;
+        availabilityLabel.textContent = "✓ Ready to play: " + selectedName() + ".";
+        fallback.hidden = true;
+      } else {
+        tellNotReady("Audio not published yet: " + selectedName() +
+          ". You can still read this answer. Choose Emma + Short answer to listen immediately.");
+      }
+    } catch(err) {
+      if(requestNumber !== availabilityCheck) return;
+      checkedReady = null;
+      availabilityLabel.textContent = "Could not verify " + selectedName() +
+        " (connection unavailable). You can still try Play.";
+    }
+  }
+
   function timerClear() { if (gapTimer !== null) clearTimeout(gapTimer); gapTimer = null;gapTarget = null; gapRemaining = 0; }
   function ui() {
     play.disabled = !items.length;
@@ -62,6 +106,7 @@
     answerKind.textContent = answerMode === "full" ? "MY UPLOADED ANSWER" : "SHORT ANSWER";
     progress.value = items.length ? index / items.length : 0;
     ui();
+    void checkCurrentAudio();
   }
   function stopped(resetAudio = true) {
     generation++;
@@ -240,11 +285,13 @@
   }
   play.addEventListener("click",() => {
     if (!items.length) {setStatus("Choose a topic containing questions.");return;}
+    if (!active && checkedReady === false) { setStatus("The selected recording is not published yet. Choose Emma with Short answer to listen now."); return; }
     if (active) {if (paused) resumeIt();else pauseIt();return;}
     active = true;paused = false;startQuestion();
   });
   playAnswer.addEventListener("click", () => {
     if (!items.length) return;
+    if (checkedReady === false) { setStatus("The selected recording is not published yet. Choose Emma with Short answer to listen now."); return; }
     stopped(); active = true; paused = false;
     startAnswer();
   });
@@ -268,14 +315,28 @@
   voice.addEventListener("change", () => {
     stopped();
     if (voiceLabel) voiceLabel.textContent = (VOICES[voice.value] || "Emma") + " · Kokoro";
-    if (items.length) src("question");
+    if (items.length) {src("question"); void checkCurrentAudio();}
     setStatus("Selected " + (VOICES[voice.value] || "Emma") + ". Press Play to hear the saved question and answer.");
+  });
+  fallback.addEventListener("click", () => {
+    stopped();
+    voice.value = "bf_emma";
+    if(voiceLabel) voiceLabel.textContent = "Emma · Kokoro";
+    answerMode = "short";
+    render();
+    active = true;
+    paused = false;
+    startAnswer();
   });
   rate.addEventListener("change",() => {audio.playbackRate=Number(rate.value)||1;});
   playlistLoop.addEventListener("change",ui);
   audio.addEventListener("ended",onEnd);
   audio.addEventListener("error",() => {
-    if (active) {stopped();setStatus("This " + (answerMode === "full" ? "uploaded-answer" : "short-answer") + " recording for " + (VOICES[voice.value] || "Emma") + " is not available yet. Your selected answer remains visible. Try again after GitHub finishes generating the audio.");}
+    if (active) {
+      stopped();
+      tellNotReady("Audio not published yet: " + selectedName() + ". Your answer text is still visible. Choose Emma + Short answer to listen now.");
+      setStatus("The requested MP3 is missing. Use the available Emma short-answer recording or retry after audio publishing completes.");
+    }
   });
   window.addEventListener("pagehide",() => stopped());
   async function checkSavedAudio() {

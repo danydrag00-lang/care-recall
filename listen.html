@@ -1,68 +1,53 @@
-<!doctype html><html lang="en-GB"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#11796f"><meta name="description" content="Free care assistant interview preparation with spoken questions, spaced repetition and surprise mock interviews."><title>Listen & Learn · CareRecall</title><link rel="icon" type="image/svg+xml" href="assets/favicon.svg"><link rel="manifest" href="manifest.webmanifest"><link rel="stylesheet" href="assets/style.css"></head><body data-page="listen"><div class="app-layout"><aside class="sidebar"><a class="brand" href="index.html"><span class="brand-mark">✦</span><span>care<em>recall</em></span></a><p class="nav-note">Your learning space</p><nav class="nav-stack" aria-label="Main navigation"><a class="nav-link " href="index.html"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z"/></svg><span>Dashboard</span></a><a class="nav-link " href="practice.html"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="m8 12 3 3 5-6"/></svg><span>Recall practice</span></a><a class="nav-link active" href="listen.html" aria-current="page"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9v6H3V9zm15 0v6h-3V9zM6 12a6 6 0 0 1 12 0M6 16a6 6 0 0 0 12 0"/><path d="M12 18v4"/></svg><span>Listen & Learn</span></a><a class="nav-link " href="library.html"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h6v16H4zM10 4h10v16H10zM4 9h16M4 15h16"/></svg><span>Question library</span></a></nav><div class="sidebar-bottom"><h3>Small steps. Strong answers.</h3><p>Remember the idea, not a memorised script.</p><div class="small"><strong id="side-mastered">0</strong> questions feeling confident</div><div class="side-progress"><i id="side-bar"></i></div></div></aside><main class="main"><div class="topline"><div class="crumb">YOUR INTERVIEW STUDIO <span aria-hidden="true">/</span> Audio learning</div><div class="pill-status"><i class="dot"></i> Free · No account needed</div></div><header><span class="eyebrow">KOKORO AI · AUDIO PRACTICE</span><h1 class="page-title">Interview Practice with AI Voices</h1><p class="lede">Use Kokoro AI to hear questions and answers back to back, with a pause to practise recalling each answer. You can also play Cartesia or TwoShot recordings.</p></header>
-<section class="surface kokoro-section" aria-labelledby="kokoro-title">
-  <div class="kokoro-header"><div><span class="eyebrow">NEW · FREE OPEN-SOURCE NEURAL VOICE</span><h2 id="kokoro-title">Listen with Kokoro AI voices</h2><p>Natural British English voices powered by the Kokoro AI speech model. Listen to each question, think of your answer, then hear the model answer automatically. No paid account or API key required.</p></div><span class="kokoro-tag">OPEN SOURCE</span></div>
-  <div class="kokoro-grid">
-    <div class="kokoro-options">
-      <div class="field"><label for="kokoro-voice">British English voice</label><select id="kokoro-voice"><option value="bf_emma">Emma · British female (recommended)</option><option value="bf_isabella">Isabella · British female</option><option value="bf_alice">Alice · British female</option><option value="bf_lily">Lily · British female</option><option value="bm_george">George · British male</option><option value="bm_fable">Fable · British male</option><option value="bm_daniel">Daniel · British male</option><option value="bm_lewis">Lewis · British male</option></select></div>
-      <div class="field"><label for="kokoro-topic">Questions to play</label><select id="kokoro-topic"><option value="all">All 72 questions</option></select></div>
-      <div class="field"><label for="kokoro-length">Answer length</label><select id="kokoro-length"><option value="short">Short spoken answers (recommended)</option><option value="full">Full answers from the notes</option></select></div>
-      <div class="field"><label for="kokoro-thinking">Thinking pause</label><select id="kokoro-thinking"><option value="0">No pause</option><option value="6" selected>6 seconds</option><option value="12">12 seconds</option><option value="20">20 seconds</option></select></div>
-      <div class="field"><label for="kokoro-rate">Speech rate</label><select id="kokoro-rate"><option value="0.85">Slow · 0.85×</option><option value="1" selected>Normal · 1×</option><option value="1.1">Faster · 1.1×</option></select></div>
-      <label class="check-row kokoro-check"><input type="checkbox" id="kokoro-shuffle"><span>Surprise me · shuffle questions</span></label>
+<!doctype html><html lang="en-GB"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#11796f"><meta name="description" content="Free care assistant interview preparation with spoken questions, spaced repetition and surprise mock interviews."><title>Listen & Learn · CareRecall</title><link rel="icon" type="image/svg+xml" href="assets/favicon.svg"><link rel="manifest" href="manifest.webmanifest"><link rel="stylesheet" href="assets/style.css"></head><body data-page="listen"><div class="app-layout"><aside class="sidebar"><a class="brand" href="index.html"><span class="brand-mark">✦</span><span>care<em>recall</em></span></a><p class="nav-note">Your learning space</p><nav class="nav-stack" aria-label="Main navigation"><a class="nav-link " href="index.html"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z"/></svg><span>Dashboard</span></a><a class="nav-link " href="practice.html"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="m8 12 3 3 5-6"/></svg><span>Recall practice</span></a><a class="nav-link active" href="listen.html" aria-current="page"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9v6H3V9zm15 0v6h-3V9zM6 12a6 6 0 0 1 12 0M6 16a6 6 0 0 0 12 0"/><path d="M12 18v4"/></svg><span>Listen & Learn</span></a><a class="nav-link " href="library.html"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h6v16H4zM10 4h10v16H10zM4 9h16M4 15h16"/></svg><span>Question library</span></a></nav><div class="sidebar-bottom"><h3>Small steps. Strong answers.</h3><p>Remember the idea, not a memorised script.</p><div class="small"><strong id="side-mastered">0</strong> questions feeling confident</div><div class="side-progress"><i id="side-bar"></i></div></div></aside><main class="main"><div class="topline"><div class="crumb">YOUR INTERVIEW STUDIO <span aria-hidden="true">/</span> Audio learning</div><div class="pill-status"><i class="dot"></i> Free · No account needed</div></div><header><span class="eyebrow">SAVED ANSWERS · AUDIO PRACTICE</span><h1 class="page-title">Listen to Your Answers</h1><p class="lede">Press Play to hear a question and your answer in a saved British English voice. Repeat it until you feel confident, then press Next.</p></header>
+<section class="saved-lesson" aria-labelledby="saved-player-title">
+  <div class="saved-intro">
+    <div>
+      <span class="eyebrow">READY-TO-PLAY · BRITISH ENGLISH</span>
+      <h2 id="saved-player-title">Listen to your interview answers</h2>
+      <p>Your 72 questions and answers are recorded in Kokoro's British English voice and saved as MP3 files. No voice model download, API key, or manual generation is required when listening.</p>
     </div>
-    <div class="kokoro-playback">
-      <div class="kokoro-playing-title"><span class="eyebrow">NOW LEARNING</span><p id="kokoro-position">Question 1 of 72</p><h3 id="kokoro-question">Choose a voice and press Start listening.</h3></div>
-      <progress id="kokoro-meter" max="1" value="0" aria-label="Audio questions completed"></progress>
-      <div class="kokoro-buttons"><button id="kokoro-start" type="button" class="btn btn-primary">▶ Start listening</button><button id="kokoro-stop" type="button" class="btn btn-outline" disabled>Stop</button><button id="kokoro-next" type="button" class="btn btn-outline" disabled>Skip question →</button></div>
-      <audio id="kokoro-audio" controls preload="none" aria-label="Kokoro speech player"></audio>
-      <p id="kokoro-status" class="kokoro-status" role="status" aria-live="polite">Ready. The voice model downloads when you press Start.</p>
-      <p class="kokoro-note"><strong>First use:</strong> Kokoro downloads a large AI voice model (tens to hundreds of MB). Later visits may reuse that download. Speech generation may be slow on older computers or phones. If Kokoro cannot run, play downloaded MP3 recordings in the player below. Playback may pause when your browser is in the background.</p>
-    </div>
+    <div class="saved-voice-pill"><span aria-hidden="true">♫</span> Emma · Kokoro</div>
   </div>
-  <p class="kokoro-credit">Based on <a href="https://github.com/hexgrad/kokoro" target="_blank" rel="noopener noreferrer">Kokoro</a> and <a href="https://www.npmjs.com/package/kokoro-js" target="_blank" rel="noopener noreferrer">kokoro-js</a> (Apache 2.0). Model files are downloaded from Hugging Face and app code from jsDelivr. Your question text is processed in this browser, not submitted to a paid voice service.</p>
-</section>
-<section class="surface recording-section" aria-labelledby="recording-title">
-  <div class="recording-intro">
-    <span class="eyebrow">VOICE STUDIO · OPTIONAL</span>
-    <h2 id="recording-title">Play Cartesia or TwoShot recordings</h2>
-    <p>Generate recordings with Cartesia or TwoShot, then play them back to back here. The Kokoro voice player above remains available.</p>
-  </div>
-  <div class="recording-grid">
-    <div class="recording-panel">
-      <div class="recording-step"><span>01</span><div><h3>Prepare your narration</h3><p>Copy a ready-to-read script for Cartesia or TwoShot. Each batch contains four questions, helping you manage free-tier limits.</p></div></div>
-      <div class="recording-fields">
-        <div class="field"><label for="recording-batch">Question batch</label><select id="recording-batch"></select></div>
-        <div class="field"><label for="recording-version">Answer style</label><select id="recording-version"><option value="short">Short answers (recommended)</option><option value="full">Full answers</option></select></div>
+
+  <div class="saved-player-layout">
+    <div class="saved-main-panel">
+      <div class="saved-heading">
+        <span id="saved-stage" class="saved-stage">READY</span>
+        <span id="saved-position" class="saved-position">Question 1 of 72</span>
       </div>
-      <p id="recording-count" class="recording-count" aria-live="polite"></p>
-      <textarea id="recording-script" readonly aria-label="Narration script for Cartesia or TwoShot" rows="8" spellcheck="false"></textarea>
-      <div class="recording-buttons"><button id="recording-copy" type="button" class="btn btn-primary">Copy script</button><button id="recording-save-text" type="button" class="btn btn-outline">Download script</button></div>
-      <div class="cartesia-voice-preset" aria-labelledby="cartesia-voice-title">
-  <div class="cartesia-voice-heading"><span class="eyebrow">YOUR SELECTED CARTESIA VOICE</span><h3 id="cartesia-voice-title">Julia · Gentle Guide <span class="cartesia-voice-accent">British English</span></h3></div>
-  <p>Use this voice when generating interview questions and answers in Cartesia. Julia has a calm British English delivery suited to learning.</p>
-  <div class="cartesia-voice-id-row"><code id="cartesia-voice-id">273f9ef7-9fc2-4def-88bb-ab108c6249ca</code><button type="button" class="btn btn-outline btn-small" id="cartesia-copy-id" aria-label="Copy Julia voice ID">Copy voice ID</button></div>
-  <p class="cartesia-voice-note">The voice ID selects Julia in Cartesia's API. In the Cartesia Playground, find Julia · Gentle Guide by name if direct ID selection is unavailable. Audio generation still happens in Cartesia; your browser's device and Kokoro voices are separate.</p>
-</div>
-<div class="recording-provider-links"><a class="btn btn-ghost recording-open" href="https://play.cartesia.ai/" target="_blank" rel="noopener noreferrer">Open Cartesia Sonic ↗</a><a class="btn btn-ghost recording-open" href="https://twoshot.app/open-source-tts/" target="_blank" rel="noopener noreferrer">Try TwoShot Qwen3 voice ↗</a></div><p class="recording-help">Cartesia has a free monthly allowance of 20,000 text-to-speech credits (around 27 minutes of generated speech). Generate recordings in the Cartesia Playground, download any available audio export, then choose those audio files on the right. Do not put API keys in this website or GitHub repository.</p>
-    </div>
-    <div class="recording-panel">
-      <div class="recording-step"><span>02</span><div><h3>Listen back to back</h3><p>After downloading your MP3 or WAV recordings from any supported voice studio, select them all here. Files play in filename order, then automatically continue.</p></div></div>
-      <label class="recording-file-label" for="recording-files">Select MP3 or WAV recordings</label>
-      <input id="recording-files" type="file" accept="audio/*,.mp3,.m4a,.wav,.ogg" multiple aria-describedby="recording-upload-help">
-      <p id="recording-upload-help" class="recording-help">Name downloads <strong>01.mp3, 02.mp3, 03.mp3</strong> to keep them in order. The audio files you select stay in this browser.</p>
-      <div class="recording-audio-box">
-        <div id="recording-current" class="recording-now" aria-live="polite">No recordings selected yet</div>
-        <audio id="recording-player" controls preload="none" aria-label="Audio narration player"></audio>
-        <div class="recording-controls">
-          <button type="button" id="recording-prev" class="btn btn-outline btn-small" disabled>← Previous</button>
-          <button type="button" id="recording-next" class="btn btn-outline btn-small" disabled>Next →</button>
-          <label for="recording-speed">Speed <select id="recording-speed"><option value="0.85">0.85×</option><option value="1" selected>1×</option><option value="1.1">1.1×</option><option value="1.25">1.25×</option></select></label>
-        </div>
-        <label class="check-row"><input id="recording-loop" type="checkbox"><span>Repeat the audio playlist</span></label>
+      <div class="saved-question-box">
+        <span class="saved-question-kicker">INTERVIEW QUESTION</span>
+        <h3 id="saved-question">Tell me about yourself.</h3>
       </div>
-      <ol id="recording-queue" class="recording-queue" aria-label="Audio files queued for playback"></ol>
-      <p class="recording-help">Play Cartesia, TwoShot or your own MP3/WAV recordings here. No website API key is needed. Cartesia and TwoShot may have free-tier limits. Keep this page open while listening.</p>
+      <div class="saved-answer-box">
+        <div class="saved-answer-heading"><span class="saved-answer-icon" aria-hidden="true">✓</span><span>YOUR ANSWER · Short version</span></div>
+        <p id="saved-answer">Your short answer appears here.</p>
+        <details open class="saved-original">
+          <summary>Show your original full answer</summary>
+          <p id="saved-full-answer"></p>
+        </details>
+      </div>
+      <progress id="saved-progress" max="1" value="0" aria-label="Questions completed"></progress>
+      <div class="saved-transport">
+        <button id="saved-prev" type="button" class="btn btn-outline" disabled>← Previous</button>
+        <button id="saved-play" type="button" class="btn btn-primary" disabled>▶ Play</button>
+        <button id="saved-stop" type="button" class="btn btn-outline" disabled>Stop</button>
+        <button id="saved-next" type="button" class="btn btn-primary">Next question →</button>
+      </div>
+      <audio id="saved-audio" controls preload="none" aria-label="Saved question and answer recordings"></audio>
+      <p class="saved-status" id="saved-status" role="status" aria-live="polite">Checking for saved recordings…</p>
     </div>
+
+    <aside class="saved-settings">
+      <h3>Listening settings</h3>
+      <div class="field"><label for="saved-topic">Select a topic</label><select id="saved-topic"><option value="all">All 72 questions</option></select></div>
+      <div class="field"><label for="saved-rate">Playback speed</label><select id="saved-rate"><option value="0.8">Slow · 0.8×</option><option value="1" selected>Normal · 1×</option><option value="1.15">Faster · 1.15×</option></select></div>
+      <div class="field"><label for="saved-think">Pause to think before the answer</label><select id="saved-think"><option value="0">No pause</option><option value="6" selected>6 seconds</option><option value="12">12 seconds</option><option value="20">20 seconds</option></select></div>
+      <label class="saved-check" id="saved-repeat-label"><input type="checkbox" id="saved-repeat" checked><span><strong>Repeat this question</strong><small>Keep repeating the question and answer until I press Next.</small></span></label>
+      <label class="saved-check"><input type="checkbox" id="saved-loop"><span><strong>Repeat the full list</strong><small>Start again at Question 1 after the final question.</small></span></label>
+      <button type="button" class="btn btn-outline saved-reload" id="saved-reload">↻ Check recordings</button>
+      <p class="saved-note">Your answer is always shown below the question. Audio uses the short version; your original full answer is also visible. Repeat mode is on by default.</p>
+    </aside>
   </div>
 </section>
-<p class="disclaimer">For deeper learning, listen with a 6–20 second pause and try to say the answer yourself before the model answer plays. Listening alone is useful for familiarisation, but speaking from memory is the important extra step.</p><div class="footer"><span>CareRecall · A calmer way to prepare for a care assistant interview</span><span>Private to this browser · Built for UK interviews</span></div></main></div><div id="toast" class="toast hidden" role="status" aria-live="polite"></div><script defer src="assets/data.js"></script><script defer src="assets/app.js"></script><script defer src="assets/kokoro.js"></script></body></html>
+<p class="disclaimer">Use the thinking pause to answer aloud before hearing the recording. Repeat the same question as often as you like, then press Next when ready.</p><div class="footer"><span>CareRecall · A calmer way to prepare for a care assistant interview</span><span>Private to this browser · Built for UK interviews</span></div></main></div><div id="toast" class="toast hidden" role="status" aria-live="polite"></div><script defer src="assets/data.js"></script><script defer src="assets/app.js"></script><script defer src="assets/saved-audio.js"></script></body></html>

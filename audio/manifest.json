@@ -1,390 +1,476 @@
 {
-  "version": 1,
+  "version": 2,
   "voice": "bf_emma",
   "voices": [
     {
       "id": "bf_emma",
       "name": "Emma",
       "accent": "British female",
-      "base": "audio"
+      "base": "audio",
+      "answer_styles": [
+        "short",
+        "full"
+      ]
     },
     {
       "id": "bf_isabella",
       "name": "Isabella",
       "accent": "British female",
-      "base": "audio/voices/bf_isabella"
+      "base": "audio/voices/bf_isabella",
+      "answer_styles": [
+        "short"
+      ]
     },
     {
       "id": "bm_george",
       "name": "George",
       "accent": "British male",
-      "base": "audio/voices/bm_george"
+      "base": "audio/voices/bm_george",
+      "answer_styles": [
+        "short"
+      ]
     }
   ],
   "model": "Kokoro-82M-v1.0",
-  "answer_style": "short",
+  "answer_style": "short_and_full",
   "question_count": 72,
   "bank_sha256": "3b08ac861886598761130cf1dcc83d44562f13ceec3f120738e3e8d05ca726cb",
   "files": [
     {
       "id": 1,
       "question": "audio/questions/001.mp3",
-      "answer": "audio/answers/001.mp3"
+      "answer": "audio/answers/001.mp3",
+      "answer_full": "audio/answers-full/001.mp3"
     },
     {
       "id": 2,
       "question": "audio/questions/002.mp3",
-      "answer": "audio/answers/002.mp3"
+      "answer": "audio/answers/002.mp3",
+      "answer_full": "audio/answers-full/002.mp3"
     },
     {
       "id": 3,
       "question": "audio/questions/003.mp3",
-      "answer": "audio/answers/003.mp3"
+      "answer": "audio/answers/003.mp3",
+      "answer_full": "audio/answers-full/003.mp3"
     },
     {
       "id": 4,
       "question": "audio/questions/004.mp3",
-      "answer": "audio/answers/004.mp3"
+      "answer": "audio/answers/004.mp3",
+      "answer_full": "audio/answers-full/004.mp3"
     },
     {
       "id": 5,
       "question": "audio/questions/005.mp3",
-      "answer": "audio/answers/005.mp3"
+      "answer": "audio/answers/005.mp3",
+      "answer_full": "audio/answers-full/005.mp3"
     },
     {
       "id": 6,
       "question": "audio/questions/006.mp3",
-      "answer": "audio/answers/006.mp3"
+      "answer": "audio/answers/006.mp3",
+      "answer_full": "audio/answers-full/006.mp3"
     },
     {
       "id": 7,
       "question": "audio/questions/007.mp3",
-      "answer": "audio/answers/007.mp3"
+      "answer": "audio/answers/007.mp3",
+      "answer_full": "audio/answers-full/007.mp3"
     },
     {
       "id": 8,
       "question": "audio/questions/008.mp3",
-      "answer": "audio/answers/008.mp3"
+      "answer": "audio/answers/008.mp3",
+      "answer_full": "audio/answers-full/008.mp3"
     },
     {
       "id": 9,
       "question": "audio/questions/009.mp3",
-      "answer": "audio/answers/009.mp3"
+      "answer": "audio/answers/009.mp3",
+      "answer_full": "audio/answers-full/009.mp3"
     },
     {
       "id": 10,
       "question": "audio/questions/010.mp3",
-      "answer": "audio/answers/010.mp3"
+      "answer": "audio/answers/010.mp3",
+      "answer_full": "audio/answers-full/010.mp3"
     },
     {
       "id": 11,
       "question": "audio/questions/011.mp3",
-      "answer": "audio/answers/011.mp3"
+      "answer": "audio/answers/011.mp3",
+      "answer_full": "audio/answers-full/011.mp3"
     },
     {
       "id": 12,
       "question": "audio/questions/012.mp3",
-      "answer": "audio/answers/012.mp3"
+      "answer": "audio/answers/012.mp3",
+      "answer_full": "audio/answers-full/012.mp3"
     },
     {
       "id": 13,
       "question": "audio/questions/013.mp3",
-      "answer": "audio/answers/013.mp3"
+      "answer": "audio/answers/013.mp3",
+      "answer_full": "audio/answers-full/013.mp3"
     },
     {
       "id": 14,
       "question": "audio/questions/014.mp3",
-      "answer": "audio/answers/014.mp3"
+      "answer": "audio/answers/014.mp3",
+      "answer_full": "audio/answers-full/014.mp3"
     },
     {
       "id": 15,
       "question": "audio/questions/015.mp3",
-      "answer": "audio/answers/015.mp3"
+      "answer": "audio/answers/015.mp3",
+      "answer_full": "audio/answers-full/015.mp3"
     },
     {
       "id": 16,
       "question": "audio/questions/016.mp3",
-      "answer": "audio/answers/016.mp3"
+      "answer": "audio/answers/016.mp3",
+      "answer_full": "audio/answers-full/016.mp3"
     },
     {
       "id": 17,
       "question": "audio/questions/017.mp3",
-      "answer": "audio/answers/017.mp3"
+      "answer": "audio/answers/017.mp3",
+      "answer_full": "audio/answers-full/017.mp3"
     },
     {
       "id": 18,
       "question": "audio/questions/018.mp3",
-      "answer": "audio/answers/018.mp3"
+      "answer": "audio/answers/018.mp3",
+      "answer_full": "audio/answers-full/018.mp3"
     },
     {
       "id": 19,
       "question": "audio/questions/019.mp3",
-      "answer": "audio/answers/019.mp3"
+      "answer": "audio/answers/019.mp3",
+      "answer_full": "audio/answers-full/019.mp3"
     },
     {
       "id": 20,
       "question": "audio/questions/020.mp3",
-      "answer": "audio/answers/020.mp3"
+      "answer": "audio/answers/020.mp3",
+      "answer_full": "audio/answers-full/020.mp3"
     },
     {
       "id": 21,
       "question": "audio/questions/021.mp3",
-      "answer": "audio/answers/021.mp3"
+      "answer": "audio/answers/021.mp3",
+      "answer_full": "audio/answers-full/021.mp3"
     },
     {
       "id": 22,
       "question": "audio/questions/022.mp3",
-      "answer": "audio/answers/022.mp3"
+      "answer": "audio/answers/022.mp3",
+      "answer_full": "audio/answers-full/022.mp3"
     },
     {
       "id": 23,
       "question": "audio/questions/023.mp3",
-      "answer": "audio/answers/023.mp3"
+      "answer": "audio/answers/023.mp3",
+      "answer_full": "audio/answers-full/023.mp3"
     },
     {
       "id": 24,
       "question": "audio/questions/024.mp3",
-      "answer": "audio/answers/024.mp3"
+      "answer": "audio/answers/024.mp3",
+      "answer_full": "audio/answers-full/024.mp3"
     },
     {
       "id": 25,
       "question": "audio/questions/025.mp3",
-      "answer": "audio/answers/025.mp3"
+      "answer": "audio/answers/025.mp3",
+      "answer_full": "audio/answers-full/025.mp3"
     },
     {
       "id": 26,
       "question": "audio/questions/026.mp3",
-      "answer": "audio/answers/026.mp3"
+      "answer": "audio/answers/026.mp3",
+      "answer_full": "audio/answers-full/026.mp3"
     },
     {
       "id": 27,
       "question": "audio/questions/027.mp3",
-      "answer": "audio/answers/027.mp3"
+      "answer": "audio/answers/027.mp3",
+      "answer_full": "audio/answers-full/027.mp3"
     },
     {
       "id": 28,
       "question": "audio/questions/028.mp3",
-      "answer": "audio/answers/028.mp3"
+      "answer": "audio/answers/028.mp3",
+      "answer_full": "audio/answers-full/028.mp3"
     },
     {
       "id": 29,
       "question": "audio/questions/029.mp3",
-      "answer": "audio/answers/029.mp3"
+      "answer": "audio/answers/029.mp3",
+      "answer_full": "audio/answers-full/029.mp3"
     },
     {
       "id": 30,
       "question": "audio/questions/030.mp3",
-      "answer": "audio/answers/030.mp3"
+      "answer": "audio/answers/030.mp3",
+      "answer_full": "audio/answers-full/030.mp3"
     },
     {
       "id": 31,
       "question": "audio/questions/031.mp3",
-      "answer": "audio/answers/031.mp3"
+      "answer": "audio/answers/031.mp3",
+      "answer_full": "audio/answers-full/031.mp3"
     },
     {
       "id": 32,
       "question": "audio/questions/032.mp3",
-      "answer": "audio/answers/032.mp3"
+      "answer": "audio/answers/032.mp3",
+      "answer_full": "audio/answers-full/032.mp3"
     },
     {
       "id": 33,
       "question": "audio/questions/033.mp3",
-      "answer": "audio/answers/033.mp3"
+      "answer": "audio/answers/033.mp3",
+      "answer_full": "audio/answers-full/033.mp3"
     },
     {
       "id": 34,
       "question": "audio/questions/034.mp3",
-      "answer": "audio/answers/034.mp3"
+      "answer": "audio/answers/034.mp3",
+      "answer_full": "audio/answers-full/034.mp3"
     },
     {
       "id": 35,
       "question": "audio/questions/035.mp3",
-      "answer": "audio/answers/035.mp3"
+      "answer": "audio/answers/035.mp3",
+      "answer_full": "audio/answers-full/035.mp3"
     },
     {
       "id": 36,
       "question": "audio/questions/036.mp3",
-      "answer": "audio/answers/036.mp3"
+      "answer": "audio/answers/036.mp3",
+      "answer_full": "audio/answers-full/036.mp3"
     },
     {
       "id": 37,
       "question": "audio/questions/037.mp3",
-      "answer": "audio/answers/037.mp3"
+      "answer": "audio/answers/037.mp3",
+      "answer_full": "audio/answers-full/037.mp3"
     },
     {
       "id": 38,
       "question": "audio/questions/038.mp3",
-      "answer": "audio/answers/038.mp3"
+      "answer": "audio/answers/038.mp3",
+      "answer_full": "audio/answers-full/038.mp3"
     },
     {
       "id": 39,
       "question": "audio/questions/039.mp3",
-      "answer": "audio/answers/039.mp3"
+      "answer": "audio/answers/039.mp3",
+      "answer_full": "audio/answers-full/039.mp3"
     },
     {
       "id": 40,
       "question": "audio/questions/040.mp3",
-      "answer": "audio/answers/040.mp3"
+      "answer": "audio/answers/040.mp3",
+      "answer_full": "audio/answers-full/040.mp3"
     },
     {
       "id": 41,
       "question": "audio/questions/041.mp3",
-      "answer": "audio/answers/041.mp3"
+      "answer": "audio/answers/041.mp3",
+      "answer_full": "audio/answers-full/041.mp3"
     },
     {
       "id": 42,
       "question": "audio/questions/042.mp3",
-      "answer": "audio/answers/042.mp3"
+      "answer": "audio/answers/042.mp3",
+      "answer_full": "audio/answers-full/042.mp3"
     },
     {
       "id": 43,
       "question": "audio/questions/043.mp3",
-      "answer": "audio/answers/043.mp3"
+      "answer": "audio/answers/043.mp3",
+      "answer_full": "audio/answers-full/043.mp3"
     },
     {
       "id": 44,
       "question": "audio/questions/044.mp3",
-      "answer": "audio/answers/044.mp3"
+      "answer": "audio/answers/044.mp3",
+      "answer_full": "audio/answers-full/044.mp3"
     },
     {
       "id": 45,
       "question": "audio/questions/045.mp3",
-      "answer": "audio/answers/045.mp3"
+      "answer": "audio/answers/045.mp3",
+      "answer_full": "audio/answers-full/045.mp3"
     },
     {
       "id": 46,
       "question": "audio/questions/046.mp3",
-      "answer": "audio/answers/046.mp3"
+      "answer": "audio/answers/046.mp3",
+      "answer_full": "audio/answers-full/046.mp3"
     },
     {
       "id": 47,
       "question": "audio/questions/047.mp3",
-      "answer": "audio/answers/047.mp3"
+      "answer": "audio/answers/047.mp3",
+      "answer_full": "audio/answers-full/047.mp3"
     },
     {
       "id": 48,
       "question": "audio/questions/048.mp3",
-      "answer": "audio/answers/048.mp3"
+      "answer": "audio/answers/048.mp3",
+      "answer_full": "audio/answers-full/048.mp3"
     },
     {
       "id": 49,
       "question": "audio/questions/049.mp3",
-      "answer": "audio/answers/049.mp3"
+      "answer": "audio/answers/049.mp3",
+      "answer_full": "audio/answers-full/049.mp3"
     },
     {
       "id": 50,
       "question": "audio/questions/050.mp3",
-      "answer": "audio/answers/050.mp3"
+      "answer": "audio/answers/050.mp3",
+      "answer_full": "audio/answers-full/050.mp3"
     },
     {
       "id": 51,
       "question": "audio/questions/051.mp3",
-      "answer": "audio/answers/051.mp3"
+      "answer": "audio/answers/051.mp3",
+      "answer_full": "audio/answers-full/051.mp3"
     },
     {
       "id": 52,
       "question": "audio/questions/052.mp3",
-      "answer": "audio/answers/052.mp3"
+      "answer": "audio/answers/052.mp3",
+      "answer_full": "audio/answers-full/052.mp3"
     },
     {
       "id": 53,
       "question": "audio/questions/053.mp3",
-      "answer": "audio/answers/053.mp3"
+      "answer": "audio/answers/053.mp3",
+      "answer_full": "audio/answers-full/053.mp3"
     },
     {
       "id": 54,
       "question": "audio/questions/054.mp3",
-      "answer": "audio/answers/054.mp3"
+      "answer": "audio/answers/054.mp3",
+      "answer_full": "audio/answers-full/054.mp3"
     },
     {
       "id": 55,
       "question": "audio/questions/055.mp3",
-      "answer": "audio/answers/055.mp3"
+      "answer": "audio/answers/055.mp3",
+      "answer_full": "audio/answers-full/055.mp3"
     },
     {
       "id": 56,
       "question": "audio/questions/056.mp3",
-      "answer": "audio/answers/056.mp3"
+      "answer": "audio/answers/056.mp3",
+      "answer_full": "audio/answers-full/056.mp3"
     },
     {
       "id": 57,
       "question": "audio/questions/057.mp3",
-      "answer": "audio/answers/057.mp3"
+      "answer": "audio/answers/057.mp3",
+      "answer_full": "audio/answers-full/057.mp3"
     },
     {
       "id": 58,
       "question": "audio/questions/058.mp3",
-      "answer": "audio/answers/058.mp3"
+      "answer": "audio/answers/058.mp3",
+      "answer_full": "audio/answers-full/058.mp3"
     },
     {
       "id": 59,
       "question": "audio/questions/059.mp3",
-      "answer": "audio/answers/059.mp3"
+      "answer": "audio/answers/059.mp3",
+      "answer_full": "audio/answers-full/059.mp3"
     },
     {
       "id": 60,
       "question": "audio/questions/060.mp3",
-      "answer": "audio/answers/060.mp3"
+      "answer": "audio/answers/060.mp3",
+      "answer_full": "audio/answers-full/060.mp3"
     },
     {
       "id": 61,
       "question": "audio/questions/061.mp3",
-      "answer": "audio/answers/061.mp3"
+      "answer": "audio/answers/061.mp3",
+      "answer_full": "audio/answers-full/061.mp3"
     },
     {
       "id": 62,
       "question": "audio/questions/062.mp3",
-      "answer": "audio/answers/062.mp3"
+      "answer": "audio/answers/062.mp3",
+      "answer_full": "audio/answers-full/062.mp3"
     },
     {
       "id": 63,
       "question": "audio/questions/063.mp3",
-      "answer": "audio/answers/063.mp3"
+      "answer": "audio/answers/063.mp3",
+      "answer_full": "audio/answers-full/063.mp3"
     },
     {
       "id": 64,
       "question": "audio/questions/064.mp3",
-      "answer": "audio/answers/064.mp3"
+      "answer": "audio/answers/064.mp3",
+      "answer_full": "audio/answers-full/064.mp3"
     },
     {
       "id": 65,
       "question": "audio/questions/065.mp3",
-      "answer": "audio/answers/065.mp3"
+      "answer": "audio/answers/065.mp3",
+      "answer_full": "audio/answers-full/065.mp3"
     },
     {
       "id": 66,
       "question": "audio/questions/066.mp3",
-      "answer": "audio/answers/066.mp3"
+      "answer": "audio/answers/066.mp3",
+      "answer_full": "audio/answers-full/066.mp3"
     },
     {
       "id": 67,
       "question": "audio/questions/067.mp3",
-      "answer": "audio/answers/067.mp3"
+      "answer": "audio/answers/067.mp3",
+      "answer_full": "audio/answers-full/067.mp3"
     },
     {
       "id": 68,
       "question": "audio/questions/068.mp3",
-      "answer": "audio/answers/068.mp3"
+      "answer": "audio/answers/068.mp3",
+      "answer_full": "audio/answers-full/068.mp3"
     },
     {
       "id": 69,
       "question": "audio/questions/069.mp3",
-      "answer": "audio/answers/069.mp3"
+      "answer": "audio/answers/069.mp3",
+      "answer_full": "audio/answers-full/069.mp3"
     },
     {
       "id": 70,
       "question": "audio/questions/070.mp3",
-      "answer": "audio/answers/070.mp3"
+      "answer": "audio/answers/070.mp3",
+      "answer_full": "audio/answers-full/070.mp3"
     },
     {
       "id": 71,
       "question": "audio/questions/071.mp3",
-      "answer": "audio/answers/071.mp3"
+      "answer": "audio/answers/071.mp3",
+      "answer_full": "audio/answers-full/071.mp3"
     },
     {
       "id": 72,
       "question": "audio/questions/072.mp3",
-      "answer": "audio/answers/072.mp3"
+      "answer": "audio/answers/072.mp3",
+      "answer_full": "audio/answers-full/072.mp3"
     }
+  ],
+  "answer_styles": [
+    "short",
+    "full"
   ]
 }

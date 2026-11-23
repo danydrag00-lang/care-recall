@@ -23,11 +23,22 @@
   </div>
   <p class="kokoro-credit">Based on <a href="https://github.com/hexgrad/kokoro" target="_blank" rel="noopener noreferrer">Kokoro</a> and <a href="https://www.npmjs.com/package/kokoro-js" target="_blank" rel="noopener noreferrer">kokoro-js</a> (Apache 2.0). Model files are downloaded from Hugging Face and app code from jsDelivr. Your question text is processed in this browser, not submitted to a paid voice service.</p>
 </section>
+<section class="surface voicebox-section" aria-labelledby="voicebox-title">
+  <span class="eyebrow">VOICEBOX · OPEN-SOURCE DESKTOP OPTION</span>
+  <h2 id="voicebox-title">Make full-length lessons with Voicebox</h2>
+  <p><strong>Voicebox</strong> is a free, locally installed AI voice studio for Mac and Windows. Download a ready-to-read script with your 72 interview questions and answers, open it in Voicebox, select a natural voice, and generate an audio recording. You can then listen to the recordings here without limits or an API key.</p>
+  <div class="voicebox-actions">
+    <button id="voicebox-export-short" type="button" class="btn btn-primary">↓ Download short-answer script</button>
+    <button id="voicebox-export-full" type="button" class="btn btn-outline">↓ Download full-answer script</button>
+    <a class="btn btn-ghost" href="https://voicebox.sh" target="_blank" rel="noopener noreferrer">Get Voicebox for Mac or Windows ↗</a>
+  </div>
+  <p class="eleven-help">Voicebox automatically breaks long narration into smaller chunks. Download the script, open Voicebox, choose a preset voice or your own authorised voice recording, generate audio and save it. Upload MP3 or WAV files using the player below. Voicebox runs locally on your computer and needs a model download and sufficient processing resources; it doesn't run inside GitHub Pages.</p>
+</section>
 <section class="surface elevenlabs-section" aria-labelledby="elevenlabs-title">
   <div class="elevenlabs-intro">
     <span class="eyebrow">VOICE STUDIO · OPTIONAL</span>
-    <h2 id="elevenlabs-title">Hear the questions in an ElevenLabs voice</h2>
-    <p>Choose a short group of questions, generate an MP3 using ElevenLabs, then play all your recordings back to back here. The regular device voice above remains free and works immediately.</p>
+    <h2 id="elevenlabs-title">Play your ElevenLabs or Voicebox recordings</h2>
+    <p>Generate recordings with ElevenLabs or Voicebox, then play them back to back here. The regular device voice remains available for free.</p>
   </div>
   <div class="elevenlabs-grid">
     <div class="elevenlabs-panel">
@@ -42,8 +53,8 @@
       <a class="btn btn-ghost eleven-open" href="https://elevenlabs.io/text-to-speech" target="_blank" rel="noopener noreferrer">Open ElevenLabs text-to-speech ↗</a>
     </div>
     <div class="elevenlabs-panel">
-      <div class="elevenlabs-step"><span>02</span><div><h3>Listen back to back</h3><p>After downloading the MP3 recordings from ElevenLabs, select them all here. Files play in filename order, then automatically continue.</p></div></div>
-      <label class="eleven-file-label" for="eleven-files">Select your ElevenLabs audio files</label>
+      <div class="elevenlabs-step"><span>02</span><div><h3>Listen back to back</h3><p>After downloading your MP3 or WAV recordings, select them all here. Files play in filename order, then automatically continue.</p></div></div>
+      <label class="eleven-file-label" for="eleven-files">Select MP3 or WAV recordings</label>
       <input id="eleven-files" type="file" accept="audio/*,.mp3,.m4a,.wav,.ogg" multiple aria-describedby="eleven-upload-help">
       <p id="eleven-upload-help" class="eleven-help">Name downloads <strong>01.mp3, 02.mp3, 03.mp3</strong> and so on to keep them in the correct order. Files stay on your device.</p>
       <div class="eleven-audio-box">
@@ -57,8 +68,8 @@
         <label class="check-row"><input id="eleven-loop" type="checkbox"><span>Repeat the audio playlist</span></label>
       </div>
       <ol id="eleven-queue" class="eleven-queue" aria-label="ElevenLabs files queued for playback"></ol>
-      <p class="eleven-help">No ElevenLabs API key is needed for this method. The free ElevenLabs plan has monthly generation limits; generating all 72 questions may require more than the free allowance. Keep the page open while listening.</p>
+      <p class="eleven-help">You can use either Voicebox or ElevenLabs audio files. No website API key is needed. ElevenLabs has free-tier generation limits. Keep the page open while listening.</p>
     </div>
   </div>
 </section>
-<p class="disclaimer">For deeper learning, listen with a 6–20 second pause and try to say the answer yourself before the model answer plays. Listening alone is useful for familiarisation, but speaking from memory is the important extra step.</p><div class="footer"><span>CareRecall · A calmer way to prepare for a care assistant interview</span><span>Private to this browser · Built for UK interviews</span></div></main></div><div id="toast" class="toast hidden" role="status" aria-live="polite"></div><script defer src="assets/data.js"></script><script defer src="assets/app.js"></script><script defer src="assets/kokoro.js"></script></body></html>
+<p class="disclaimer">For deeper learning, listen with a 6–20 second pause and try to say the answer yourself before the model answer plays. Listening alone is useful for familiarisation, but speaking from memory is the important extra step.</p><div class="footer"><span>CareRecall · A calmer way to prepare for a care assistant interview</span><span>Private to this browser · Built for UK interviews</span></div></main></div><div id="toast" class="toast hidden" role="status" aria-live="polite"></div><script defer src="assets/data.js"></script><script defer src="assets/app.js"></script><script defer src="assets/kokoro.js"></script><script defer src="assets/voicebox-export.js"></script></body></html>

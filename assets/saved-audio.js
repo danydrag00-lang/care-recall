@@ -101,6 +101,7 @@
         stage = "thinking";ui();
         setGap(700, startQuestion);
       } else {
+        stage = "thinking";ui();
         setGap(650, () => move(1, true));
       }
     }

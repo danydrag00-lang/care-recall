@@ -150,7 +150,7 @@
       if (session === id) {
         abort();
         status("Kokoro could not load: " + (err?.message || "network/model error") +
-          ". Use the free device voice player above instead.");
+          ". You can still use downloaded MP3 recordings in the player below.");
       }
     }
   }

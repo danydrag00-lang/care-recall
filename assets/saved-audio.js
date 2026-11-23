@@ -353,6 +353,14 @@
   });
   rate.addEventListener("change",() => {audio.playbackRate=Number(rate.value)||1;});
   playlistLoop.addEventListener("change",ui);
+  // Real playback is authoritative: clear an earlier 404 once audio truly plays.
+  audio.addEventListener("playing",() => {
+    if (stage === "answer") {
+      checkedReady = true;
+      availabilityLabel.textContent = "✓ Playing saved audio: " + selectedName() + ".";
+      fallback.hidden = true;
+    }
+  });
   audio.addEventListener("ended",onEnd);
   audio.addEventListener("error",() => {
     if (active) {
